@@ -285,8 +285,13 @@ class ServiceLocator {
 
   /// 检查服务是否已注册
   bool isRegistered<T extends Object>({String? instanceName}) {
-    final name = instanceName ?? T.toString();
-    return _getIt.isRegistered<Object>(instanceName: name);
+    try {
+      final name = instanceName ?? T.toString();
+      return _getIt.isRegistered<T>(instanceName: name);
+    } catch (e) {
+      // 如果类型检查失败，返回false
+      return false;
+    }
   }
 
   /// 重置所有服务

@@ -5,24 +5,74 @@
 ### 整体架构概览
 桌宠AI助理平台采用"桌宠-总线"插件式架构，基于"包驱动Monorepo"技术栈构建。
 
-#### 核心设计原则
+#### 核心设计原则 (Phase 2.1升级)
 - **模块化**: 每个功能模块作为独立包，物理隔离和逻辑独立
-- **双端适配**: PC端"空间化OS"模式 + 移动端"沉浸式标准应用"模式
-- **组合优于继承**: AppShell抽象基类通过组合使用不同的Renderer
-- **先具体后抽象**: 从具体实现开始，积累经验后再抽象接口
+- **三端差异化**: PC端"空间化OS"、移动端"模块化应用生态"、Web端"响应式兼容"
+- **组合优于继承**: DisplayModeAwareShell通过适配器模式集成不同Shell
+- **开放性设计**: Shell-Module交互契约支持未来插件生态扩展
+- **可替换外壳**: ui_framework提供外壳抽象，desktop_environment提供内核实现
 
-### 双端UI框架架构
+### 三端UI框架架构 (Phase 2.1完整实现)
 
-#### AppShell抽象基类
+#### DisplayModeAwareShell - 核心适配器
 ```dart
-abstract class AppShell extends StatefulWidget {
-  // 统一的Shell接口，支持模块加载、路由管理、状态同步
+class DisplayModeAwareShell extends StatefulWidget {
+  // 三端动态切换的核心适配器
+  // 监听DisplayModeService状态，实时切换Shell
+  // 统一的模块管理和locale支持
 }
 ```
 
-#### 平台特定实现
-- **StandardAppShell**: 移动端沉浸式标准应用模式
-- **SpatialOsShell**: PC端空间化OS桌面模式
+#### DisplayModeService - 模式切换服务
+```dart
+class DisplayModeService {
+  // 三种显示模式：desktop, mobile, web
+  // RxDart响应式架构，Stream状态流
+  // SharedPreferences持久化存储
+  // DisplayModeChangedEvent事件系统
+}
+```
+
+#### 三端平台特定实现
+- **ModularMobileShell**: 移动端模块化应用生态，每个模块作为独立应用实例
+- **ResponsiveWebShell**: Web端响应式兼容模式，多设备适配
+- **SpatialOsShell**: PC端空间化OS桌面模式（复用desktop_environment）
+
+### Shell-Module交互契约系统
+
+#### 核心接口设计
+```dart
+abstract class ModuleContract {
+  // 模块与Shell的标准通信接口
+  String get moduleId;
+  String get displayName;
+  ModuleCapabilities get capabilities;
+  Future<void> initialize(ShellContext context);
+  Widget buildWidget(BuildContext context);
+  Future<void> onShellEvent(ShellEvent event);
+}
+
+abstract class ShellContext {
+  // Shell为模块提供的环境和服务
+  WindowManagementService get windowManager;
+  NotificationService get notifications;
+  NavigationService get navigation;
+  ThemeService get theme;
+}
+```
+
+#### 权限与安全模型
+```dart
+enum ModulePermission {
+  ui,           // UI渲染权限
+  navigation,   // 导航控制权限
+  storage,      // 数据存储权限
+  network,      // 网络访问权限
+  filesystem,   // 文件系统访问权限
+  notifications,// 通知权限
+  system        // 系统级权限
+}
+```
 
 ### 包架构分层
 
@@ -247,48 +297,82 @@ abstract class IStateManager {
 - **移动端**: Android APK/iOS IPA应用商店分发
 - **Web端**: 渐进式Web应用(PWA)部署
 
-## 三端架构重新设计 (Phase 2.0后期调整)
+## 三端架构完整实现 (Phase 2.1完成)
 
-### 设计理念演进
+### 设计理念实现
 
-基于Phase 2.0双端自适应UI框架的成功实现，我们重新思考了多端架构设计，形成更加系统性和符合原生体验的三端策略：
+基于Phase 2.0双端自适应UI框架的成功实现，Phase 2.1完整实现了三端差异化架构，每端都有独特的交互体验和技术特色：
 
-### 1. 桌面端 - "空间化OS"模式 ✅ **已完成**
+### 1. 桌面端 - "空间化OS"模式 ✅ **完全实现**
 - **平台**: Windows/macOS/Linux
+- **实现方案**: 复用`desktop_environment`包的SpatialOsShell
 - **特点**: WindowManager窗口管理、FloatingWindow浮窗、AppDock应用坞
 - **设计哲学**: 桌面工作台隐喻，多窗口并行工作流
-- **状态**: Phase 2.0完全实现
+- **架构角色**: desktop_environment作为共用内核层，ui_framework作为可替换外壳层
+- **状态**: Phase 2.0-2.1持续完善
 
-### 2. Web端 - "响应式兼容"模式 🎯 **重新定位**
-- **原定位**: 移动端模拟
-- **新定位**: 双端平衡的兼容模式，响应式布局
-- **特点**: Material Design标准应用，BottomNavigation + Drawer
-- **适用场景**: 浏览器访问、跨平台兼容、快速体验
-- **技术**: StandardAppShell，自适应布局
-
-### 3. 移动端 - "原生应用"模式 🆕 **全新设计**
+### 2. 移动端 - "模块化应用生态"模式 ✅ **全新实现**
 - **平台**: Android/iOS
-- **设计理念**: 原生应用模式，应用<->功能模块
-- **核心概念**: 
-  - 每个功能模块作为独立"应用"概念
-  - 设置作为独立"APK"，包含system、application、个性化等
-  - 符合手机原生交互习惯
-- **状态**: 待Phase 2.1设计实现
+- **实现方案**: ModularMobileShell - 真正的模块化应用架构
+- **核心特性**:
+  - **每个模块 = 独立应用实例**: _ModuleInstance类管理生命周期
+  - **系统级任务管理器**: 查看、切换、关闭运行中的模块
+  - **模块启动器**: AppDock移动端适配，底部图标启动器
+  - **系统状态栏**: 时间、活跃模块数、系统控制
+- **设计哲学**: 原生应用生态模式，模块完全解耦独立运行
+- **交互优势**: 全屏卡片、触控优化、流畅动画效果
 
-### 架构优势
+### 3. Web端 - "响应式兼容"模式 ✅ **完整实现**
+- **平台**: 现代Web浏览器
+- **实现方案**: ResponsiveWebShell - 多设备响应式架构
+- **核心特性**:
+  - **自适应导航**: NavigationRail（大屏）↔ BottomNavigationBar（小屏）
+  - **响应式网格**: 1-4列智能调整，适配320px-1920px屏幕
+  - **面包屑导航**: Web端特有的路径导航和页面定位
+  - **浏览器优化**: URL路由、SEO友好、键盘鼠标操作
+- **设计哲学**: 兼容性优先，提供跨平台统一体验
+- **适用场景**: 浏览器访问、快速体验、跨设备兼容
 
-1. **差异化体验**: 三端各有特色，充分利用平台优势
-2. **渐进式体验**: Web端作为兼容桥梁，移动端提供原生深度体验
-3. **技术复用**: 底层业务逻辑和服务框架完全共享
-4. **扩展性**: 为未来新平台预留架构空间
+### DisplayModeService - 三端统一切换
 
-### 实施计划
+```dart
+enum DisplayMode {
+  desktop,    // 桌面端：空间化OS
+  mobile,     // 移动端：模块化应用生态  
+  web,        // Web端：响应式兼容
+}
 
-- **Phase 2.1**: 设计并实现真正的移动端原生模式
-- **Phase 2.2**: Web端响应式优化，移动端深度交互
-- **Phase 2.3**: 三端功能对等，跨端数据同步
+class DisplayModeService {
+  // 响应式状态流，实时切换Shell
+  Stream<DisplayMode> get currentModeStream;
+  Future<void> switchToMode(DisplayMode mode);
+  Future<void> switchToNextMode(); // 循环切换
+}
+```
+
+### 架构优势实现
+
+1. **✅ 差异化体验**: 三端各有独特交互模式，充分发挥平台优势
+2. **✅ 无缝切换**: DisplayModeAwareShell实现运行时动态切换
+3. **✅ 技术复用**: 底层业务逻辑和服务框架完全共享，仅外壳差异化
+4. **✅ 开放性扩展**: Shell-Module契约为未来插件生态奠定基础
+5. **✅ 可替换架构**: ui_framework外壳层可独立演进，内核层保持稳定
+
+### 测试与质量保障
+
+- **DisplayModeService**: 24个单元测试，覆盖所有模式切换逻辑
+- **三端Shell Widget测试**: 4个测试文件，验证各端特性和集成功能
+- **端到端切换测试**: 验证Mobile→Web→Desktop循环切换稳定性
+- **性能基准**: 模式切换响应时间、内存占用、渲染帧率监控
+
+### 下一步演进计划
+
+- **Phase 2.2**: 数据持久化升级，模块间状态同步优化
+- **Phase 2.3**: 模块生态扩展，插件开发工具和市场
+- **Phase 3.0**: AI智能模块推荐，企业级功能扩展
 
 ---
 
-*最后更新: 2025-06-27 Sprint 2.0c Step 15*
-*下次更新: 状态管理Phase升级或架构重大变更时*
+*最后更新: 2025-06-28 Phase 2.1 Step 9*
+*Phase 2.1更新内容: 三端UI框架完整实现、DisplayModeService、Shell-Module交互契约*
+*下次更新: Phase 2.2数据持久化升级或状态管理Phase演进时*

@@ -35,7 +35,7 @@ void main() {
     });
 
     test('should start uninitialized', () {
-      expect(serviceLocator.isInitialized, isTrue); // reset后应该为true
+      expect(serviceLocator.isInitialized, isFalse); // reset后应该为false
     });
 
     test('should allow debug mode setting', () {

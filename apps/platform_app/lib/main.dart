@@ -66,8 +66,31 @@ class PetAppMain extends StatefulWidget {
   State<PetAppMain> createState() => _PetAppMainState();
 }
 
-class _PetAppMainState extends State<PetAppMain> {
+class _PetAppMainState extends State<PetAppMain> with WidgetsBindingObserver {
   Locale? _currentLocale;
+  
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+  
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    // 清理DisplayModeService资源
+    displayModeService.dispose();
+    super.dispose();
+  }
+  
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    // 应用生命周期变化处理
+    if (state == AppLifecycleState.detached) {
+      displayModeService.dispose();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -173,8 +196,13 @@ Future<void> _initializeCoreServices() async {
     final eventBus = EventBus();
     ServiceLocator.instance.registerSingleton<EventBus>(eventBus);
     
+    // 初始化DisplayModeService - Phase 2.1三端UI框架核心服务
+    displayModeService = DisplayModeService();
+    await displayModeService.initialize();
+    
     if (kDebugMode) {
       print('✅ 核心服务初始化完成 - EventBus已注册');
+      print('✅ DisplayModeService初始化完成 - 当前模式: ${displayModeService.currentMode.displayName}');
     }
   } catch (e) {
     if (kDebugMode) {

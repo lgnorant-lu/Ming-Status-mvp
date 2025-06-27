@@ -3,10 +3,11 @@
 File name:          app_router.dart
 Author:             Ignorant-lu
 Date created:       2025/06/25
-Last modified:      2025/06/27
-Description:        应用路由配置 - 基于go_router的声明式路由管理，支持双端自适应UI框架
+Last modified:      2025/06/28
+Description:        应用路由配置 - 基于go_router的声明式路由管理，支持三端自适应UI框架动态切换
 ---------------------------------------------------------------
 Change History:
+    2025/06/28: Phase 2.1 Step 6 - 重构为DisplayModeAwareShell，实现基于DisplayModeService的三端动态切换逻辑;
     2025/06/27: Phase 2.0 Sprint 2.0a - 集成StandardAppShell，支持平台自动检测和双端外壳切换;
     2025/06/26: Phase 1.5 重构 - 移除重复定义，导入route_definitions;
     2025/06/25: Initial creation for Phase 1 routing foundation;
@@ -14,15 +15,20 @@ Change History:
 */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ui_framework/ui_framework.dart';
+import 'package:core_services/core_services.dart';
 import 'package:notes_hub/notes_hub.dart';
 import 'package:workshop/workshop.dart';
 import 'package:punch_in/punch_in.dart';
 import 'route_definitions.dart';
 
 /// 应用路由配置类
+/// 
+/// Phase 2.1 更新：集成DisplayModeAwareShell，支持三端UI外壳动态切换：
+/// - Desktop模式：SpatialOsShell (桌面空间化OS)
+/// - Mobile模式：ModularMobileShell (真正的原生模块化应用)
+/// - Web模式：ResponsiveWebShell (响应式Web应用)
 class AppRouter {
   static final GoRouter _router = GoRouter(
     initialLocation: RoutePaths.home,
@@ -58,11 +64,12 @@ class AppRouter {
     ),
     
     routes: [
-      // 主框架路由 - 使用双端自适应外壳
+      // 主框架路由 - 使用三端自适应外壳
       ShellRoute(
         builder: (context, state, child) {
-          return AppShell.adaptive(
+          return DisplayModeAwareShell(
             localizations: _getDefaultLocalizations(),
+            onLocaleChanged: _handleLocaleChange,
             modules: _buildModuleList(),
           );
         },
@@ -105,15 +112,11 @@ class AppRouter {
       
       // 独立页面路由（不在主框架内）
       
-      // 设置页面路由
+      // 设置页面路由 - Phase 2.1将集成DisplayMode切换功能
       GoRoute(
         path: RoutePaths.settings,
         name: 'settings',
-        builder: (context, state) => _buildPlaceholderPage(
-          context,
-          '设置',
-          '应用配置、主题设置和偏好管理\nPhase 2.1将实现完整功能',
-        ),
+        builder: (context, state) => _buildSettingsPage(context),
       ),
       
       // 关于页面路由
@@ -123,7 +126,7 @@ class AppRouter {
         builder: (context, state) => _buildPlaceholderPage(
           context,
           '关于',
-          '桌宠AI助理平台 v2.0.0\nPhase 2.0 双端自适应UI框架',
+          '桌宠AI助理平台 v2.1.0\nPhase 2.1 三端自适应UI框架',
         ),
       ),
     ],
@@ -131,6 +134,13 @@ class AppRouter {
 
   /// 获取路由器实例
   static GoRouter get router => _router;
+  
+  /// 处理语言切换 - 未来可与国际化系统集成
+  static void _handleLocaleChange(Locale locale) {
+    // TODO: Phase 2.2 - 集成真正的国际化系统
+    // 目前暂时处理为空，未来可以更新所有本地化字符串
+    debugPrint('Locale changed to: ${locale.languageCode}');
+  }
   
   /// 导航到指定路径
   static void navigateTo(BuildContext context, String path, {Map<String, String>? queryParameters}) {
@@ -250,7 +260,7 @@ class AppRouter {
           
           const SizedBox(height: 16),
           
-          // Phase 2.0 状态卡片
+          // Phase 2.1 三端架构状态卡片
           Card(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -260,12 +270,12 @@ class AppRouter {
                   Row(
                     children: [
                       Icon(
-                        Icons.rocket_launch,
+                        Icons.auto_awesome,
                         color: Theme.of(context).colorScheme.secondary,
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        'Phase 2.0 Sprint 2.0a',
+                        'Phase 2.1 三端自适应架构',
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: Theme.of(context).colorScheme.secondary,
                         ),
@@ -274,16 +284,59 @@ class AppRouter {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '✅ StandardAppShell (移动端外壳) 已实现\n✅ 平台自动检测已启用\n✅ 模块占位符UI已就绪',
+                    '✅ ModularMobileShell (真正模块化移动端) 已实现\n✅ DisplayModeAwareShell (三端智能适配) 已集成\n✅ DisplayModeService (动态切换服务) 已启用',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 12),
-                  Text(
-                    '当前平台: ${_getPlatformName()}',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  
+                  // DisplayModeService实时状态
+                  StreamBuilder<DisplayMode>(
+                    stream: displayModeService.currentModeStream,
+                    initialData: displayModeService.currentMode,
+                    builder: (context, snapshot) {
+                      final currentMode = snapshot.data ?? DisplayMode.mobile;
+                      return Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.phonelink_setup,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 20,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '当前显示模式: ${currentMode.displayName}',
+                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      color: Theme.of(context).colorScheme.primary,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Text(
+                                    currentMode.description,
+                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () => navigateTo(context, RoutePaths.settings),
+                              child: const Text('切换'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -321,26 +374,6 @@ class AppRouter {
         ),
       ),
     )).toList();
-  }
-
-  /// 获取平台名称
-  static String _getPlatformName() {
-    if (kIsWeb) return 'Web (标准模式)';
-    
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-        return 'Android (沉浸式标准应用)';
-      case TargetPlatform.iOS:
-        return 'iOS (沉浸式标准应用)';
-      case TargetPlatform.windows:
-        return 'Windows (空间化OS模式 - Phase 2.0b)';
-      case TargetPlatform.macOS:
-        return 'macOS (空间化OS模式 - Phase 2.0b)';
-      case TargetPlatform.linux:
-        return 'Linux (空间化OS模式 - Phase 2.0b)';
-      default:
-        return '未知平台';
-    }
   }
 
   /// 获取默认本地化
@@ -498,6 +531,166 @@ class AppRouter {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  /// 构建设置页面 - Phase 2.1 集成DisplayMode切换功能
+  static Widget _buildSettingsPage(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('设置'),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Phase 2.1 显示模式切换区域
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.display_settings,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '显示模式',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    
+                    // DisplayModeService集成
+                    StreamBuilder<DisplayMode>(
+                      stream: displayModeService.currentModeStream,
+                      initialData: displayModeService.currentMode,
+                      builder: (context, snapshot) {
+                        final currentMode = snapshot.data ?? DisplayMode.mobile;
+                        
+                        return Column(
+                          children: [
+                            Text(
+                              '当前模式: ${currentMode.displayName}',
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              currentMode.description,
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            
+                            // 模式切换按钮
+                            Wrap(
+                              spacing: 8,
+                              children: DisplayMode.values.map((mode) {
+                                final isSelected = mode == currentMode;
+                                return FilterChip(
+                                  selected: isSelected,
+                                  label: Text(mode.displayName),
+                                  onSelected: (selected) {
+                                    if (selected && mode != currentMode) {
+                                      displayModeService.switchToMode(mode);
+                                    }
+                                  },
+                                  backgroundColor: isSelected 
+                                      ? Theme.of(context).colorScheme.primaryContainer
+                                      : null,
+                                  selectedColor: Theme.of(context).colorScheme.primaryContainer,
+                                  checkmarkColor: Theme.of(context).colorScheme.primary,
+                                );
+                              }).toList(),
+                            ),
+                            
+                            const SizedBox(height: 12),
+                            
+                            // 快速切换按钮
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton.icon(
+                                onPressed: () => displayModeService.switchToNextMode(),
+                                icon: const Icon(Icons.swap_horiz),
+                                label: const Text('切换到下一种模式'),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            
+            const SizedBox(height: 16),
+            
+            // 其他设置选项占位符
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.tune,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '应用设置',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      '主题设置、通知偏好、数据同步等功能\n将在后续版本中实现',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            
+            const SizedBox(height: 32),
+            
+            // 返回按钮
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () => goBack(context),
+                  child: const Text('返回'),
+                ),
+                ElevatedButton(
+                  onPressed: () => navigateTo(context, RoutePaths.home),
+                  child: const Text('首页'),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

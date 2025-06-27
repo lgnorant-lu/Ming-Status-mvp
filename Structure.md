@@ -131,6 +131,123 @@
 - **实时数据可视化**: FPS趋势图，系统资源监控 ✅
 - **开发者工具**: DevPanel提供窗口状态调试能力 ✅
 
+## Phase 2.1三端UI框架与开放性设计 ✅ **已完成** (2025-06-28)
+
+基于Phase 2.0的双端架构成功，Phase 2.1实现了真正的三端UI框架和开放性模块生态设计：
+
+### **核心服务增强** (`packages/core_services/`) ✅ `[completed - Phase 2.1]`
+- **DisplayModeService**: 三端模式切换的核心服务 ✅
+  - 支持三种显示模式：`desktop`（桌面）、`mobile`（移动）、`web`（Web）
+  - 基于RxDart的响应式架构，实时模式状态流
+  - SharedPreferences持久化存储，支持模式切换历史记录
+  - 完整的事件系统：DisplayModeChangedEvent流式通知
+  - 24个单元测试100%通过，覆盖所有核心功能
+
+### **三端UI外壳系统** (`packages/ui_framework/`) ✅ `[completed - Phase 2.1]`
+重构UI框架，实现真正的三端外壳架构：
+
+#### **DisplayModeAwareShell** ✅ `[核心适配器]`
+- **功能**: 三端动态切换的核心适配器，监听DisplayModeService状态
+- **特性**: 
+  - 实时响应模式切换事件，无缝切换Shell
+  - 加载状态管理，确保服务初始化完成后再渲染
+  - 模块列表统一管理，支持自定义和默认模块配置
+  - locale变更回调支持，为国际化预留接口
+
+#### **ModularMobileShell** ✅ `[移动端真正模块化]`
+- **设计理念**: "每个模块 = 独立应用实例"，借鉴desktop_environment的模块独立性
+- **核心特性**:
+  - **模块生命周期管理**: _ModuleInstance类独立管理每个模块的运行状态
+  - **系统级任务管理器**: 查看、切换、关闭运行中的模块实例
+  - **模块启动器**: 类似AppDock的移动端适配，底部图标启动器
+  - **系统状态栏**: 实时显示时间、活跃模块数、系统控制按钮
+  - **移动端优化**: 全屏卡片布局、触控交互优化、流畅动画效果
+- **交互模式**: 模块完全解耦，各自管理独立状态，真正体现原生模块化应用设计
+
+#### **ResponsiveWebShell** ✅ `[Web端响应式]`
+- **设计理念**: 多设备适配的Web响应式体验
+- **核心特性**:
+  - **自适应导航**: NavigationRail（大屏）↔ BottomNavigationBar（小屏）
+  - **响应式网格**: 智能调整模块卡片列数（1-4列），适配多种屏幕尺寸
+  - **面包屑导航**: Web端特有的路径导航和页面定位
+  - **浏览器优化**: URL路由支持、SEO友好、键盘鼠标操作
+- **屏幕适配**: 320px-1920px全范围响应，支持手机、平板、桌面、大屏
+
+#### **SpatialOsShell集成** ✅ `[桌面端复用]`
+- **架构设计**: 复用`desktop_environment`包的SpatialOsShell
+- **理念澄清**: 
+  - `ui_framework` = 可替换外壳层
+  - `desktop_environment` = 共用内核层
+- **集成方式**: DisplayModeAwareShell通过适配器模式集成SpatialOsShell
+
+### **开放性设计与模块生态** ✅ `[completed - Phase 2.1]`
+建立完整的Shell-Module交互契约和开发者规范：
+
+#### **Shell-Module交互契约** (`docs/03_protocols_and_guides/shell_module_contract_v1.md`) ✅
+- **核心通信协议**: ModuleContract接口、ShellContext环境
+- **服务请求机制**: 窗口管理、通知系统、导航服务请求
+- **事件响应系统**: Shell生命周期、主题变更、显示模式切换事件
+- **数据交换规范**: ModuleDataPacket标准格式，类型安全的数据传递
+- **安全权限模型**: 7种权限类型（UI、Navigation、Storage等）+ 权限管理器
+- **版本兼容性**: 向前兼容策略，API版本控制
+- **实现示例**: 完整的NotesModule和WindowManagementService代码示例
+
+#### **模块API规范** (`docs/03_protocols_and_guides/module_api_specification_v1.md`) ✅
+- **模块开发标准**: 目录结构、依赖管理、UI开发规范
+- **数据管理规范**: RxDart状态管理、数据模型设计规范
+- **国际化支持**: ARB文件配置、本地化集成标准
+- **测试规范**: 契约兼容性测试、集成测试框架
+- **部署分发**: 模块打包规范、质量检查清单
+- **最佳实践**: 性能优化、错误处理、安全考虑指南
+
+### **质量保障与测试体系** ✅ `[completed - Phase 2.1]`
+建立了三端UI框架的完整测试覆盖：
+
+#### **Widget测试套件** (`packages/ui_framework/test/`) ✅
+- **display_mode_aware_shell_test.dart**: DisplayModeAwareShell核心适配器测试
+  - 三端模式切换验证（Mobile→Web→Desktop→Mobile循环）
+  - DisplayModeService Stream集成测试
+  - 模块列表处理（自定义、默认、空模块）
+  - 加载状态和错误处理验证
+
+- **modular_mobile_shell_test.dart**: ModularMobileShell移动端测试
+  - 模块生命周期管理（启动、切换、最小化、关闭）
+  - 任务管理器功能验证
+  - 系统状态栏和模块启动器测试
+  - 模块状态保持和切换验证
+
+- **responsive_web_shell_test.dart**: ResponsiveWebShell Web端测试
+  - 多屏幕尺寸适配测试（320px-1920px）
+  - NavigationRail/BottomNavigationBar自适应验证
+  - 响应式网格布局测试
+  - 方向变化和布局重构验证
+
+- **three_terminal_integration_test.dart**: 三端框架集成测试
+  - 端到端显示模式切换验证
+  - 模块数据在模式切换间的维护测试
+  - 快速模式切换稳定性和性能测试
+  - 错误处理和边界条件验证
+
+#### **测试结果与质量状态** ✅
+- **DisplayModeService**: 24个单元测试100%通过
+- **UI框架Widget测试**: 4个测试文件，覆盖三端切换逻辑
+- **运行时Bug修复**: 解决DisplayModeService初始化问题
+- **代码质量**: flutter analyze结果"No issues found!"
+
+### **技术债务清理** ✅ `[completed - Phase 2.1]`
+- **core_services测试修复**: 解决ServiceLocator GetIt类型推断错误，24/24测试通过
+- **应用启动流程优化**: 在main.dart中正确初始化DisplayModeService
+- **应用生命周期管理**: 添加服务清理和资源管理
+
+### **架构理念与设计思想** ✅ `[Phase 2.1核心贡献]`
+- **真正的三端差异化**: 
+  - 桌面端：空间化OS工作台
+  - 移动端：模块化独立应用生态
+  - Web端：响应式兼容体验
+- **开放性生态设计**: Shell-Module契约为未来插件生态奠定基础
+- **可替换外壳架构**: ui_framework提供外壳抽象，支持未来新平台扩展
+- **模块完全解耦**: 每个模块都是独立的"应用"，真正实现热插拔
+
 ## 技术状态总结
 
 ### Phase 1.6完成状态 ✅ **基础设施完成**
@@ -148,10 +265,18 @@
 - **技术债务管理**: 11个债务追踪，偿还执行率57%，管理评级B- (100%)
 - **前瞻性接口**: 状态管理演进路径，热插拔预留接口 (100%)
 
+### Phase 2.1完成状态 ✅ **三端UI框架与开放性设计完成** (2025-06-28)
+- **三端UI外壳系统**: DisplayModeAwareShell + 三个Shell完整实现 (100%)
+- **模式切换服务**: DisplayModeService响应式架构，24个测试通过 (100%)
+- **开放性模块生态**: Shell-Module交互契约v1.0 + API规范文档完成 (100%)
+- **Widget测试体系**: 4个测试文件，覆盖三端切换逻辑和组件功能 (100%)
+- **技术债务清理**: ServiceLocator测试修复，DisplayModeService初始化Bug解决 (100%)
+- **架构理念确立**: 真正三端差异化 + 可替换外壳 + 模块完全解耦 (100%)
+
 ### 后续阶段规划状态 📋
-- **Phase 2.1**: 业务功能CRUD完善、数据持久化(Drift)升级
-- **Phase 2.2**: 系统应用功能、UI/UX精修、富文本支持
-- **Phase 3.0+**: 生态系统、AI集成、插件开发框架
+- **Phase 2.2**: 数据持久化(Drift)升级、业务功能CRUD完善
+- **Phase 2.3**: 模块生态扩展、插件开发工具、跨端数据同步
+- **Phase 3.0+**: AI集成、企业级特性、开放式插件市场
 
 ## 依赖关系图
 
@@ -175,16 +300,17 @@ platform_app (主应用)
     └── ui_framework
 ```
 
-### Phase 2.0完成后依赖关系 ✅ **当前架构** (2025-06-27)
+### Phase 2.1完成后依赖关系 ✅ **当前架构** (2025-06-28)
 ```
 platform_app (主应用)
-├── core_services (核心服务框架)
+├── core_services (核心服务框架) ✨[新增DisplayModeService]
 ├── app_config (配置管理)  
-├── app_routing (路由服务)
-├── ui_framework (UI框架)
-│   ├── core_services
-│   └── app_routing
-├── desktop_environment (✨新增 - 空间化OS桌面环境)
+├── app_routing (路由服务) ✨[集成DisplayModeService切换逻辑]
+├── ui_framework (UI框架) ✨[重构三端Shell系统]
+│   ├── core_services [依赖DisplayModeService]
+│   ├── app_routing
+│   └── desktop_environment [桌面端Shell集成]
+├── desktop_environment (空间化OS桌面环境)
 │   ├── core_services
 │   ├── ui_framework
 │   └── app_routing
@@ -198,6 +324,12 @@ platform_app (主应用)
     ├── core_services
     └── ui_framework
 ```
+
+### Phase 2.1新增核心依赖说明
+- **DisplayModeService**: core_services提供的三端模式切换服务
+- **DisplayModeAwareShell**: ui_framework的核心适配器，依赖DisplayModeService
+- **三端Shell系统**: ModularMobileShell、ResponsiveWebShell、SpatialOsShell的集成
+- **Shell-Module契约**: docs/文档化的开放性接口，为未来模块生态奠定基础
 
 ## 质量保障
 
@@ -220,6 +352,6 @@ platform_app (主应用)
 
 ---
 
-*文档状态: 基于Phase 2.0完成成果全面更新 (2025-06-27)*
-*Phase 2.0成果: 双端UI框架、WindowManager系统、DevPanel工具、52个测试100%通过*
-*下次更新: Phase 2.1核心功能完善与持久化开始时* 
+*文档状态: 基于Phase 2.1完成成果全面更新 (2025-06-28)*
+*Phase 2.1成果: 三端UI框架、DisplayModeService、Shell-Module契约、4个Widget测试*
+*下次更新: Phase 2.2数据持久化升级与业务功能CRUD完善开始时* 

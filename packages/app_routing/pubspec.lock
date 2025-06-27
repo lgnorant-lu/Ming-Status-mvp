@@ -64,6 +64,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.8"
+  desktop_environment:
+    dependency: transitive
+    description:
+      path: "../desktop_environment"
+      relative: true
+    source: path
+    version: "1.0.0"
   dio:
     dependency: transitive
     description:

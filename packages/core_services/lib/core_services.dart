@@ -41,6 +41,7 @@ export 'services/navigation_service.dart';
 export 'services/logging_service.dart';
 export 'services/error_handling_service.dart';
 export 'services/performance_monitoring_service.dart';
+export 'services/display_mode_service.dart';
 
 // 导出存储库服务
 export 'services/repositories/persistence_repository.dart';

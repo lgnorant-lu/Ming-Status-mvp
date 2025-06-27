@@ -11,6 +11,9 @@ export 'shell/main_shell.dart';
 export 'shell/navigation_drawer.dart';
 export 'shell/page_container.dart';
 export 'shell/app_shell.dart';
+export 'shell/responsive_web_shell.dart';
+export 'shell/display_mode_aware_shell.dart';
+export 'shell/modular_mobile_shell.dart';
 
 // 核心服务
 export 'core/theme_service.dart'; 
