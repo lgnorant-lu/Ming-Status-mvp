@@ -1,170 +1,76 @@
-# 上下文快照
+# 桌宠AI助理平台 - 项目即时记忆
 
-## 项目简介
-**桌宠AI助理平台** - 一个以"桌宠"为情感与交互核心的、高度模块化和可扩展的个人桌面AI助理平台。采用"桌宠-总线"插件式架构和"包驱动Monorepo"技术栈，基于Flutter构建。
+## 项目一句话简介 (Project Synopsis)
+高度模块化的"桌宠-总线"插件式AI助理平台，基于Flutter构建，实现PC/移动/Web三端差异化体验。
 
-**设计哲学**: "是桌宠，更是应用 (A Pet, and an App)" - 桌宠为平台注入生命和情感，强大的功能模块赋予平台真正的实用价值。
+## 当前宏观目标/阶段 (Current High-Level Goal/Phase)
+**✅ Phase 2.1已完成** - 三端UI框架与开放性设计
+**🎯 准备启动Phase 2.2** - 数据持久化升级与业务功能CRUD完善
 
-## 双端交互范式
-- **PC端 (Windows)**: "空间化OS (Spatial OS)"模式 - 桌宠作为智能桌面助手，功能模块以独立浮窗卡片形式存在
-- **移动端 (Android)**: "沉浸式标准应用"模式 - 遵循Material Design的全屏原生体验
+链接: `Plan.md#Phase-2.1-完成` | `Plan.md#Phase-2.2-规划`
 
-## 当前宏观目标/阶段
-**🚀 项目发展蓝图V3.0战略转换** (2025-06-27) - 从v2.0"按计划建设"转向v3.0"在实践中演进"的实战验证策略，通过开发三个核心生态应用来验证和迭代核心服务
+## 最近完成的关键里程碑 (Last Major Milestone Achieved)
+**Phase 2.1: 三端UI框架与开放性设计完整实现** (2025-06-28)
+- ✅ DisplayModeService三端模式切换服务(24测试通过)
+- ✅ 三端Shell系统完整实现: ModularMobileShell/ResponsiveWebShell/SpatialOsShell
+- ✅ Shell-Module交互契约v1.0，开放性模块生态基础
+- ✅ 技术债务清理，关键Bug修复，应用正常启动
+- ✅ 用户验证成功，确认"基本可用状态"
 
-**📋 Phase 2.1待启动**: 三端UI框架与开放性设计 - 完成ResponsiveWebShell、Shell-Module交互契约设计，为实战验证奠定基础
+链接: `.tasks/2025-06-28_2_phase2_1-adaptive-ui-framework-and-specs.md`
 
-## 最近完成的关键里程碑
-- **🎉 Phase 1.6 Finalization完成**: 消除所有已知TODO，实现企业级生产就绪状态
-  - ✅ NavigationDrawer完整本地化(12个字段，真正双语支持)
-  - ✅ LoggingService文件写入功能(异步IO、错误处理、文件轮转)
-  - ✅ 代码质量零错误零警告
-  - ✅ 技术债务清理完成
-  - ✅ API文档诚实性修正
-  - ✅ Phase 2.0详细规划制定
+## 近期核心动态 (Recent Key Activities - last 3-5 sessions)
+1. **2025-06-28**: Phase 2.1完整实施 - 10步检查清单100%完成
+2. **2025-06-27**: Phase 2.0收尾与v3.0路线图确认 
+3. **2025-06-26**: Phase 1.6最终收尾，质量保障达成
+4. **2025-06-25**: Phase 1.5包驱动Monorepo重构与国际化
+5. **2025-06-24**: Phase 1平台骨架与核心服务建立
 
-- **🏗️ Phase 1.5 架构升级与i18n集成完成**: 
-  - ✅ 包驱动Monorepo架构(7个独立包)
-  - ✅ 企业级基础设施(4大服务框架)
-  - ✅ 核心界面国际化支持
-  - ✅ 零错误零警告代码质量
+## 当前活跃任务 (Current Active Task(s))
+**无活跃任务** - Phase 2.1已完成，等待启动Phase 2.2
 
-- **🎯 Phase 1 平台骨架构建完成**: 
-  - ✅ 混合架构(事件驱动+依赖注入)
-  - ✅ 完整测试基础设施(单元测试+集成测试)
-  - ✅ 安全架构基础(认证+加密+网络安全)
-  - ✅ 13个API文档体系
+**最近完成任务**: 
+- `2025-06-28_2_phase2_1-adaptive-ui-framework-and-specs.md` ✅ 已完成
 
-- **🏗️ Phase 2.0 Sprint 2.0b**: 空间化桌面核心实现 - **2025/06/27 完成**
-  - **关键成就**: 完整的"空间化OS"模式实现，WindowManager+FloatingWindow拖拽系统
-  - **技术突破**: ≥60fps流畅拖拽，AppDock→WindowManager→FloatingWindow完整链路
-  - **质量保障**: 12项NFRs基准定义，28个测试用例，Flutter analyze零错误
-  - 链接到: [Log.md Sprint 2.0b变更记录](Log.md), [Thread.md Sprint 2.0b任务](Thread.md)
+## 短期内计划 (Immediate Next Steps - 1 to 3 items)
+1. **启动Phase 2.2**: 数据持久化升级(InMemoryRepository→DriftRepository)
+2. **业务功能CRUD完善**: 笔记、创意工坊、打卡模块的编辑功能实现
+3. **响应式布局优化**: 修复ResponsiveWebShell的RenderFlex溢出问题
 
-- **🎉 Phase 2.0 完整实现**: 双端自适应UI框架 - **2025/06/27 完成**
-  - **Sprint 2.0c (13-17)**: ✅ 窗口交互深化+前瞻性架构设计 
-    - 8方向边缘缩放+智能边界约束+AppDock保护+数据监控悬浮面板
-    - 前瞻性接口预留：状态管理演进路径、热插拔接口、性能调度器
-    - 用户反馈: "ok了,正常交互"，解决所有窗口管理问题
-  - **Sprint 2.0d (18-21)**: ✅ 质量保障与开发者工具
-    - 分层测试策略：70/73个测试通过(95.9%通过率)，≥80%核心服务覆盖率达成
-    - DevPanel MVP：实时窗口状态监控，专业级开发者工具
-    - 技术债务审查：11个债务追踪，偿还计划更新，管理评级B-
-    - 项目文档更新：README.md、Structure.md、Context.md全面反映Phase 2.0成果
-    - ⚠️ **已知问题**: core_services包3个ServiceLocator测试失败，需Phase 2.1修复
+## 关键阻碍/高优问题 (Critical Blockers/Open Issues)
+**当前无重大阻碍**
 
-## 近期核心动态
-- 🚀 **v3.0路线图整合**: `2025-06-27_6_v3-roadmap-integration.md` 任务正在执行，实现战略转换
-- ✅ **Issues.md v3.0重构**: 完全重新映射问题分类 - P2.0→P2.1(三端UI), P2.1→P2.2+P2.3(服务+MVP), P2.2→P3.0+(深化)
-- ✅ **战略转换文档化**: Plan.md增加v3.0批判性分析，建立"实战验证"核心理念
-- ✅ **Phase 2.0完整成果**: 70/73个测试通过(95.9%通过率)，双端UI框架全面实现，技术债务追踪建立
-- 🎯 **实战验证准备**: 为Phase 2.3三个核心应用(事务管理、设置、创意工坊)MVP开发做准备
-- 📋 **文档体系升级**: 从v2.0按计划建设转向v3.0实战验证驱动的文档结构
-- ⚠️ **待处理**: 技术债务重新评估优先级，DEBT-I18N-006和DEBT-UX-007需要立即处理
+**技术细节问题**:
+- ResponsiveWebShell布局溢出问题（不影响核心功能）
+- 需要完整的三端验证（Windows桌面端和Android端）
 
-## Phase 1.6 完成成果总结
+链接: `Issues.md`
 
-### 🏗️ **技术架构完善**
-- **包驱动Monorepo**: 7个独立包(core_services/app_config/app_routing/ui_framework/notes_hub/workshop/punch_in)
-- **企业级基础设施**: LoggingService、ErrorHandlingService、PerformanceMonitoringService、ThemeService
-- **完整i18n体系**: 94个键值对ARB资源文件，主界面完全国际化，语言切换功能
-- **安全与配置**: 认证服务、加密服务、环境配置管理、特性开关系统
+## 重要提醒/热点区域 ("Remember This" / "Hot Spots")
+### 📋 Phase 2.1核心架构成果
+- **DisplayModeService**: `packages/core_services/lib/services/display_mode_service.dart`
+- **三端Shell系统**: `packages/ui_framework/lib/shell/`
+  - `display_mode_aware_shell.dart` (核心适配器)
+  - `modular_mobile_shell.dart` (移动端模块化)
+  - `responsive_web_shell.dart` (Web端响应式)
+- **开放性设计文档**: `docs/03_protocols_and_guides/`
+  - `shell_module_contract_v1.md` (480+行交互契约)
+  - `module_api_specification_v1.md` (680+行API规范)
 
-### 🧩 **模块化系统增强**
-- **3个核心业务模块**: 功能架构统一，事件驱动通信，Material Design 3风格UI
-- **模块管理**: 完整生命周期管理，依赖解析，状态监控
-- **数据架构**: Repository模式，内存存储基础实现
+### 🏗️ 架构理念突破
+- **ui_framework**: 可替换外壳层
+- **desktop_environment**: 共用内核层
+- **真正三端差异化**: 桌面空间化OS + 移动模块化生态 + Web响应式兼容
+- **开放性模块生态**: Shell-Module契约为未来插件生态奠定基础
 
-### 🧪 **质量保障体系**
-- **代码质量**: flutter analyze零错误零警告
-- **测试覆盖**: 24个测试100%通过
-- **文档体系**: 13个API文档已修正确保与代码一致
-- **技术债务**: 建立追踪体系，P1.6问题全部清理
+### ⚠️ 重要配置注意事项
+- **DisplayModeService初始化**: 已在`apps/platform_app/lib/main.dart`中正确配置
+- **应用生命周期管理**: 确保服务正确清理，防止内存泄漏
+- **三端测试覆盖**: 4个Widget测试文件需定期维护和更新
 
-## 当前活跃任务
-- **🚀 新启动**: `2025-06-28_1_phase2-1-ui-framework-ecosystem-mvp.md` - Phase 2.1: 三端UI框架与开放性设计 🆕 **等待分析**
-- **当前步骤**: v3.0路线图整合已完成，启动Phase 2.1实战验证阶段
-- **核心目标**: 通过开发三个核心生态应用(设置应用、文件系统应用、创意工坊应用)来实战检验和迭代核心服务框架
-- **实战策略**: 采用"在实践中演进"的v3.0策略，通过真实应用开发验证架构设计
-- **状态**: **Phase 2.1准备中** - 需要进入RESEARCH模式分析当前架构状态和应用需求
-
-## 短期内计划 (基于项目发展蓝图V3.0)
-1. **🚀 Phase 2.1: 三端UI框架与开放性设计 (当前目标)**
-   - ✅ 已有SpatialOsShell(PC端) + StandardAppShell(移动端)
-   - 🎯 **ResponsiveWebShell实现**: 完成Web端UI框架，实现真正的三端支持
-   - 🎯 **Shell-Module交互契约设计**: 为未来插件生态奠定基础，预留桌面小组件接口
-   - 🎯 **DisplayModeService实现**: 支持三端手动切换的核心服务
-   - 🎯 **技术债务处理**: 立即处理DEBT-I18N-006和DEBT-UX-007，为实战验证准备
-
-2. **🔧 Phase 2.2: 平台核心服务就绪 (实战验证准备)**
-   - **Drift数据库集成**: 设计和实现DriftPersistenceRepository，替换内存存储
-   - **i18n服务重建**: 恢复动态语言切换，建立模块级i18n扩展机制
-   - **DX工具链建设**: 模块接口规范v1.0，模块开发脚手架，质量验证机制
-
-3. **🎯 Phase 2.3: 生态MVP与内核迭代 (v3.0核心策略)**
-   - **Week 1-2**: 事务管理中心MVP - Drift实战验证，完整CRUD，核心服务第一个用户
-   - **Week 3-4**: 设置应用MVP - i18n服务验证，显示模式切换，ThemeService实现
-   - **Week 5-6**: 创意工坊模块管理MVP - 插件生态验证，Shell-Module契约实战
-   - **Week 7-8**: 三端集成优化，输出核心服务迭代日志，API稳定性验证
-
-4. **🌟 Phase 3.0+: 生态深化与体验精修 (基于实战结果)**
-   - 桌宠皮肤系统、文件系统模块、业务功能增强、AI智能集成
-
-## 技术状态概览 (Phase 2.0完成状态)
-- **核心架构**: "桌宠-总线"插件式架构 ✅
-- **技术栈**: Flutter + RxDart + get_it + go_router ✅
-- **包管理**: "包驱动Monorepo"(8个独立包) ✅ **新增desktop_environment**
-- **安全架构**: "城堡防御模型"(多层纵深防御) ✅
-- **数据层**: Repository模式 + 内存存储(待升级Drift) ✅
-- **UI框架**: Material Design 3 + 双端响应式布局 ✅
-- **国际化**: 完整i18n体系 + 双语支持 ✅
-- **测试**: 分层测试架构 + 70/73个测试通过(95.9%通过率) ✅ **Phase 2.0升级**
-- **文档**: API文档体系 + 项目规范 ✅
-- **🎉 双端UI框架**: **✅ 已完成** - WindowManager+FloatingWindow+AppDock+DevPanel
-- **🎯 桌面环境**: **✅ 已完成** - 空间化OS模式，≥60fps流畅体验
-- **🎯 开发者工具**: **✅ 已完成** - 实时监控+性能可视化+技术债务管理
-
-## 关键阻碍/高优问题
-- **🎯 无阻碍**。Phase 2.0已完全完成，双端UI框架构建成功，70/73个测试通过(95.9%)。
-- **⚠️ 技术债务提醒**: 11个技术债务追踪中，偿还执行率57%，需在Phase 2.1前期优先偿还DEBT-PERF-002(HIGH)和DEBT-ARCH-001(MED)。
-- **🚀 准备Phase 2.1**: 基础架构完备，可以开始核心功能完善与持久化(Drift集成、CRUD完善)。
-
-## 重要提醒/热点区域
-- **🎯 项目定位升级**: 从"桌面宠物应用"升级为"桌宠AI助理平台"
-- **🚀 Phase 2.0启动**: 重点构建双端自适应UI框架，而非业务功能完善
-- **💎 核心价值主张**: "是桌宠，更是应用" - 情感体验与实用价值的完美融合
-- **🏗️ 技术架构优势**: 
-  - ✅ "桌宠-总线"插件式架构 - 高度模块化和可扩展
-  - ✅ "包驱动Monorepo" - 物理隔离和逻辑独立
-  - ✅ "城堡防御模型" - 多层安全防护
-  - ✅ 双端交互范式 - PC空间化OS + 移动端沉浸式体验
-- **📋 质量标准**: 
-  - ✅ 企业级代码质量(零错误零警告)
-  - ✅ 完整测试覆盖(24个测试100%通过)
-  - ✅ 技术债务清理(Issues.md追踪体系)
-  - ✅ 文档与代码一致性(13个API文档已修正)
-
-## AI内部状态摘要
-🚀 **v3.0战略转换正在进行**: 项目已从Phase 2.0的双端UI框架构建成功完成，现正在执行关键的战略转换 - 从v2.0"按计划建设"模式转向v3.0"在实践中演进"的实战验证策略。这是一个重大的方法论转变，将通过开发三个核心生态应用(事务管理中心、设置应用、创意工坊模块管理)来实战检验和迭代我们的核心服务架构。
-
-**v3.0整合进展**: 
-- ✅ Issues.md完全重构 - 问题重新映射到v3.0阶段划分(P2.0→P2.1, P2.1→P2.2+P2.3, P2.2→P3.0+)
-- ✅ Plan.md战略分析 - 增加v3.0批判性分析和优化建议，建立风险控制机制
-- ✅ 任务文件规范检查 - 现有task文件已符合RIPER-5协议规范
-- 🔄 Context.md更新中 - 反映v3.0战略转换的当前状态
-
-**核心战略洞察**:
-- **实战验证导向**: 通过真实应用开发来验证架构设计，避免过度工程化
-- **串行MVP策略**: 采用Week 1-2事务管理→Week 3-4设置应用→Week 5-6创意工坊的渐进式验证
-- **内核迭代机制**: 建立核心服务API变更管理和迭代日志标准
-- **风险控制强化**: API稳定性管理、并行开发风险控制、质量保障机制
-
-**Phase 2.0成果基础**: 70/73个测试通过(95.9%通过率)，WindowManager+FloatingWindow+DevPanel完整实现，技术债务追踪体系建立，为v3.0实战验证提供了坚实的架构基础。
-
-**已启动**: Phase 2.1任务文件已创建(`2025-06-28_1_phase2-1-ui-framework-ecosystem-mvp.md`) - 三端UI框架与开放性设计，通过三个核心生态应用的实战开发验证和迭代核心服务架构。
-
-**当前任务状态**: v3.0路线图整合任务已完成，Phase 2.1任务文件已创建，准备进入RESEARCH模式分析当前架构状态和三个核心应用的具体需求。
+## AI内部状态摘要 (AI's Internal State Summary)
+**Phase 2.1成功完成**: 所有10个检查清单项目均通过用户确认，架构设计文档已全面更新，Git提交包含26个文件和6512行新增代码。DisplayModeService正常工作，三端Shell系统实现了真正的差异化设计。开放性模块生态基础已奠定，为Phase 2.2的数据持久化升级和业务功能扩展做好准备。下一步重点是Drift数据库集成和CRUD功能完善。
 
 ---
-**最后更新**: 2025/06/27 v3.0路线图整合进行中
-**下次更新时机**: v3.0整合完成或Phase 2.1启动时
+*最后更新: 2025-06-28 Phase 2.1 完成*
+*下次重大更新: Phase 2.2启动时*
