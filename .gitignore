@@ -1,0 +1,160 @@
+# ===================================================================
+# TasksOrganizing - .gitignore v3
+# This file is a comprehensive combination of Flutter defaults, 
+# IDE specifics, and project-specific future-proofing rules.
+# ===================================================================
+
+# ---------------------------
+# IDEs and Editors
+# 忽略主流IDE和代码编辑器的项目配置文件
+# ---------------------------
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+.atom/
+*.komodoproject
+*.sln
+*.suo
+
+# ---------------------------
+# OS Generated Files
+# 忽略各操作系统生成的系统文件和缩略图缓存
+# ---------------------------
+.DS_Store
+.DS_Store?
+.Spotlight-V100
+.Trashes
+._*
+ehthumbs.db
+Thumbs.db
+
+# ---------------------------
+# Dart & Flutter Build Artifacts
+# 忽略由Flutter和Dart工具链生成的编译产物、缓存和配置文件
+# ---------------------------
+.dart_tool/
+.packages
+.build/
+.buildlog/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+build/
+
+# iOS/macOS build specific
+**/ios/Flutter/.last_build_id
+**/ios/Pods/
+**/ios/Flutter/App.framework
+**/ios/Flutter/engine
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/.symlinks/
+**/ios/Runner.xcworkspace/xcshareddata/
+**/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/
+**/ios/Runner.xcodeproj/xcuserdata/
+.swiftpm/
+
+# Android build specific (more explicit)
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Symbolication and Obfuscation Maps
+app.*.symbols
+app.*.map.json
+
+# ---------------------------
+# Sensitive & Local Configuration
+# 忽略包含密钥、密码和本地环境配置的敏感文件
+# ---------------------------
+*.log
+.env
+.env.*
+!.env.example
+secrets.yaml
+credentials.json
+*.key
+*.pem
+app_signing.jks
+
+# ---------------------------
+# Logs, Reports & Test Artifacts
+# 忽略应用日志、测试报告和覆盖率文件
+# ---------------------------
+coverage/
+.coverage
+.coverage.*
+nosetests.xml
+coverage.xml
+htmlcov/
+pytestdebug.log
+.history
+
+# ---------------------------
+# Python & Backend Development (Future Proofing)
+# 为未来FastAPI后端开发预留的忽略规则
+# ---------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+.pytest_cache/
+.tox/
+.nox/
+.hypothesis/
+db.sqlite3
+db.sqlite3-journal
+migrate_working_dir/
+
+# Python Virtual Environments
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# ---------------------------
+# AI / Machine Learning (Future Proofing)
+# 为未来AI模块开发预留的忽略规则，防止大型文件被意外提交
+# ---------------------------
+# Large Datasets
+data/
+datasets/
+*.csv
+*.jsonl
+*.parquet
+
+# Model Checkpoints & Files
+models/
+checkpoints/
+*.pth
+*.pt
+*.bin
+*.h5
+*.onnx
+*.pb
+
+# Experiment Tracking
+mlruns/
+wandb/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+ipython_config.py
+profile_default/
+
+# ---------------------------
+# Miscellaneous
+# 其他通用忽略项
+# ---------------------------
+*.class
+*.swp
+.svn/

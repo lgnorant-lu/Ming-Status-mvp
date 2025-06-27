@@ -1,0 +1,30 @@
+name: app_routing
+description: 基于GoRouter的声明式路由管理包，提供类型安全的导航、路由守卫和深度链接支持
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ^3.8.1
+  flutter: ">=3.24.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  go_router: ^14.6.2
+  
+  # 本地包依赖 (Phase 2.0 双端外壳集成)
+  ui_framework:
+    path: ../ui_framework
+  notes_hub:
+    path: ../notes_hub
+  workshop:
+    path: ../workshop
+  punch_in:
+    path: ../punch_in
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:

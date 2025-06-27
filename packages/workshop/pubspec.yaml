@@ -1,0 +1,21 @@
+name: workshop
+description: 创意工坊模块 - 创意记录、灵感管理、项目孵化和作品展示的综合创作平台
+version: 1.1.0
+publish_to: none
+
+environment:
+  sdk: ^3.8.1
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  core_services:
+    path: ../core_services
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter: 

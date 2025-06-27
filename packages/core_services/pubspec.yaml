@@ -1,0 +1,24 @@
+name: core_services
+description: 核心服务包，提供依赖注入、事件总线、模块管理、日志记录、错误处理、性能监控、导航服务、安全认证等完整的基础服务框架
+version: 1.0.0
+
+environment:
+  sdk: ^3.8.1
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  rxdart: ^0.28.0
+  get_it: ^8.0.3
+  dio: ^5.7.0
+  shared_preferences: ^2.3.3
+  crypto: ^3.0.6
+  go_router: ^14.6.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter: 

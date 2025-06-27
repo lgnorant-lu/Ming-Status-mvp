@@ -1,0 +1,19 @@
+name: app_config
+description: "PetApp应用配置管理包 - 提供统一的配置管理、环境变量处理、常量定义等基础功能，为整个应用架构提供配置基础。"
+version: 1.0.0
+homepage: https://github.com/petapp/packages/app_config
+
+environment:
+  sdk: ^3.8.1
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:

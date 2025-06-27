@@ -1,0 +1,27 @@
+name: desktop_environment
+description: 桌面环境包 - 实现"空间化OS"模式的核心组件，包含SpatialOsShell、WindowManager和浮窗系统
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: '>=3.1.0 <4.0.0'
+  flutter: ">=3.13.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # 核心服务依赖
+  core_services:
+    path: ../core_services
+  
+  # UI框架依赖
+  ui_framework:
+    path: ../ui_framework
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter: 

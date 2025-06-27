@@ -1,0 +1,21 @@
+name: notes_hub
+description: "笔记中心模块 - 统一的事务管理平台，支持笔记、待办、项目、提醒、习惯、目标等多种事务类型"
+version: 1.1.0
+publish_to: none
+
+environment:
+  sdk: ^3.8.1
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  core_services:
+    path: ../core_services
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter: 

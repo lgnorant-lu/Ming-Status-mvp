@@ -1,0 +1,381 @@
+{
+  "@@locale": "en",
+  "appTitle": "Ming-Pet Assistant",
+  "@appTitle": {
+    "description": "Application title"
+  },
+  "welcomeMessage": "Welcome to Ming-Pet Assistant",
+  "@welcomeMessage": {
+    "description": "Welcome message"
+  },
+  "notesHub": "Notes Hub",
+  "@notesHub": {
+    "description": "Notes hub module name"
+  },
+  "workshop": "Creative Workshop",
+  "@workshop": {
+    "description": "Workshop module name"
+  },
+  "punchIn": "Punch In",
+  "@punchIn": {
+    "description": "Punch in module name"
+  },
+  "home": "Home",
+  "@home": {
+    "description": "Home navigation"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings page"
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Save button"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button"
+  },
+  "delete": "Delete",
+  "@delete": {
+    "description": "Delete button"
+  },
+  "edit": "Edit",
+  "@edit": {
+    "description": "Edit button"
+  },
+  "search": "Search",
+  "@search": {
+    "description": "Search function"
+  },
+  "active": "Active",
+  "@active": {
+    "description": "Active status"
+  },
+  "completed": "Completed",
+  "@completed": {
+    "description": "Completed status"
+  },
+  "archived": "Archived",
+  "@archived": {
+    "description": "Archived status"
+  },
+  "total": "Total",
+  "@total": {
+    "description": "Total statistics"
+  },
+  "note": "Note",
+  "@note": {
+    "description": "Note type"
+  },
+  "todo": "Task",
+  "@todo": {
+    "description": "Task type"
+  },
+  "project": "Project",
+  "@project": {
+    "description": "Project type"
+  },
+  "reminder": "Reminder",
+  "@reminder": {
+    "description": "Reminder type"
+  },
+  "habit": "Habit",
+  "@habit": {
+    "description": "Habit type"
+  },
+  "goal": "Goal",
+  "@goal": {
+    "description": "Goal type"
+  },
+  "allTypes": "All Types",
+  "@allTypes": {
+    "description": "All types filter"
+  },
+  "currentXP": "Current XP",
+  "@currentXP": {
+    "description": "Current experience points label"
+  },
+  "appDescription": "Package-driven modular pet management application",
+  "@appDescription": {
+    "description": "Application description"
+  },
+  "moduleStatusTitle": "Module Status",
+  "@moduleStatusTitle": {
+    "description": "Module status title"
+  },
+  "notesHubDescription": "Manage your notes and tasks",
+  "@notesHubDescription": {
+    "description": "Notes hub description"
+  },
+  "workshopDescription": "Record your creativity and inspiration",
+  "@workshopDescription": {
+    "description": "Creative workshop description"
+  },
+  "punchInDescription": "Record your attendance time",
+  "@punchInDescription": {
+    "description": "Punch in center description"
+  },
+  "initializing": "Initializing task management center...",
+  "@initializing": {
+    "description": "Initialization message"
+  },
+  "searchHint": "Search tasks...",
+  "@searchHint": {
+    "description": "Search box hint"
+  },
+  "priorityUrgent": "Urgent",
+  "@priorityUrgent": {
+    "description": "Priority - urgent"
+  },
+  "priorityHigh": "High",
+  "@priorityHigh": {
+    "description": "Priority - high"
+  },
+  "priorityMedium": "Medium",
+  "@priorityMedium": {
+    "description": "Priority - medium"
+  },
+  "priorityLow": "Low",
+  "@priorityLow": {
+    "description": "Priority - low"
+  },
+  "createNew": "Create new {itemType}",
+  "@createNew": {
+    "description": "Create new item button",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "description": "Item type"
+      }
+    }
+  },
+  "noItemsFound": "No {itemType} found",
+  "@noItemsFound": {
+    "description": "Empty state message",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "description": "Item type"
+      }
+    }
+  },
+  "createItemHint": "Tap + button to create {itemType}",
+  "@createItemHint": {
+    "description": "Create hint",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "description": "Item type"
+      }
+    }
+  },
+  "title": "Title",
+  "@title": {
+    "description": "Title field"
+  },
+  "content": "Content",
+  "@content": {
+    "description": "Content field"
+  },
+  "priority": "Priority",
+  "@priority": {
+    "description": "Priority field"
+  },
+  "status": "Status",
+  "@status": {
+    "description": "Status field"
+  },
+  "createdAt": "Created At",
+  "@createdAt": {
+    "description": "Created at field"
+  },
+  "confirmDelete": "Confirm Delete",
+  "@confirmDelete": {
+    "description": "Delete confirmation title"
+  },
+  "confirmDeleteMessage": "Are you sure you want to delete \"{itemName}\"? This action cannot be undone.",
+  "@confirmDeleteMessage": {
+    "description": "Delete confirmation message",
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "description": "Name of item to delete"
+      }
+    }
+  },
+  "itemDeleted": "Item deleted",
+  "@itemDeleted": {
+    "description": "Item deletion success message"
+  },
+  "newItemCreated": "Created new {itemType}",
+  "@newItemCreated": {
+    "description": "New item creation success message",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "description": "Item type"
+      }
+    }
+  },
+  "initializingWorkshop": "Initializing Creative Workshop...",
+  "@initializingWorkshop": {
+    "description": "Workshop initialization message"
+  },
+  "noCreativeProjects": "No creative projects",
+  "@noCreativeProjects": {
+    "description": "Workshop empty state message"
+  },
+  "createNewCreativeProject": "Tap the bottom right button to create a new creative project",
+  "@createNewCreativeProject": {
+    "description": "Workshop create hint"
+  },
+  "newCreativeIdea": "New Creative Idea",
+  "@newCreativeIdea": {
+    "description": "Default new creative idea title"
+  },
+  "newCreativeDescription": "This is a new creative idea",
+  "@newCreativeDescription": {
+    "description": "Default new creative idea description"
+  },
+  "detailedCreativeContent": "Detailed creative description...",
+  "@detailedCreativeContent": {
+    "description": "Default new creative idea content"
+  },
+  "creativeProjectCreated": "Creative project created successfully",
+  "@creativeProjectCreated": {
+    "description": "Creative project creation success message"
+  },
+  "editFunctionTodo": "Edit function to be implemented",
+  "@editFunctionTodo": {
+    "description": "Edit function todo message"
+  },
+  "creativeProjectDeleted": "Creative project deleted",
+  "@creativeProjectDeleted": {
+    "description": "Creative project deletion success message"
+  },
+  "initializingPunchIn": "Initializing desktop pet punch-in system...",
+  "@initializingPunchIn": {
+    "description": "Punch-in system initialization message"
+  },
+  "level": "Level",
+  "@level": {
+    "description": "Level label"
+  },
+  "todayPunchIn": "Today's Punch In",
+  "@todayPunchIn": {
+    "description": "Today's punch in title"
+  },
+  "punchNow": "Punch Now",
+  "@punchNow": {
+    "description": "Punch now button"
+  },
+  "dailyLimitReached": "Daily punch-in limit reached",
+  "@dailyLimitReached": {
+    "description": "Daily limit reached message"
+  },
+  "punchInStats": "Punch In Statistics",
+  "@punchInStats": {
+    "description": "Punch in statistics title"
+  },
+  "totalPunches": "Total Punches",
+  "@totalPunches": {
+    "description": "Total punches statistics"
+  },
+  "remainingToday": "Remaining Today",
+  "@remainingToday": {
+    "description": "Remaining times today"
+  },
+  "recentPunches": "Recent Punches",
+  "@recentPunches": {
+    "description": "Recent punches title"
+  },
+  "noPunchRecords": "No punch records",
+  "@noPunchRecords": {
+    "description": "No punch records message"
+  },
+  "punchSuccessWithXP": "Punch successful! Gained {xp} XP",
+  "@punchSuccessWithXP": {
+    "description": "Punch success message",
+    "placeholders": {
+      "xp": {
+        "type": "int",
+        "description": "Gained experience points"
+      }
+    }
+  },
+  "lastPunchTime": "Last punch: {time}",
+  "@lastPunchTime": {
+    "description": "Last punch time",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "Punch time"
+      }
+    }
+  },
+  "punchCount": "Punch #{count}",
+  "@punchCount": {
+    "description": "Punch count number",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Punch count"
+      }
+    }
+  },
+  "coreFeatures": "Core Features",
+  "@coreFeatures": {
+    "description": "Core features section title"
+  },
+  "builtinModules": "Built-in Modules",
+  "@builtinModules": {
+    "description": "Built-in modules section title"
+  },
+  "extensionModules": "Extension Modules",
+  "@extensionModules": {
+    "description": "Extension modules section title"
+  },
+  "system": "System",
+  "@system": {
+    "description": "System functions section title"
+  },
+  "versionInfo": "Phase 1 - v1.0.0",
+  "@versionInfo": {
+    "description": "Version information"
+  },
+  "moduleStatus": "Modules: {active}/{total} active",
+  "@moduleStatus": {
+    "description": "Module status information",
+    "placeholders": {
+      "active": {
+        "type": "String",
+        "description": "Active module count"
+      },
+      "total": {
+        "type": "String",
+        "description": "Total module count"
+      }
+    }
+  },
+  "moduleManagement": "Module Management",
+  "@moduleManagement": {
+    "description": "Module management function"
+  },
+  "copyrightInfo": "© 2025 Pet Assistant\nPowered by Flutter",
+  "@copyrightInfo": {
+    "description": "Copyright information"
+  },
+  "about": "About",
+  "@about": {
+    "description": "About page"
+  },
+  "moduleManagementDialog": "Module Management",
+  "@moduleManagementDialog": {
+    "description": "Module management dialog title"
+  },
+  "moduleManagementTodo": "Module management features will be implemented in future versions",
+  "@moduleManagementTodo": {
+    "description": "Module management todo message"
+  }
+}

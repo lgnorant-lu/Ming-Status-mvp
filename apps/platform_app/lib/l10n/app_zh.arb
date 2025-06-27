@@ -1,0 +1,381 @@
+{
+  "@@locale": "zh",
+  "appTitle": "Ming-桌宠助手",
+  "@appTitle": {
+    "description": "应用标题"
+  },
+  "welcomeMessage": "欢迎使用Ming-桌宠助手",
+  "@welcomeMessage": {
+    "description": "欢迎信息"
+  },
+  "notesHub": "事务中心",
+  "@notesHub": {
+    "description": "事务中心模块名称"
+  },
+  "workshop": "创意工坊",
+  "@workshop": {
+    "description": "创意工坊模块名称"
+  },
+  "punchIn": "打卡",
+  "@punchIn": {
+    "description": "打卡模块名称"
+  },
+  "home": "首页",
+  "@home": {
+    "description": "首页导航"
+  },
+  "settings": "设置",
+  "@settings": {
+    "description": "设置页面"
+  },
+  "save": "保存",
+  "@save": {
+    "description": "保存按钮"
+  },
+  "cancel": "取消",
+  "@cancel": {
+    "description": "取消按钮"
+  },
+  "delete": "删除",
+  "@delete": {
+    "description": "删除按钮"
+  },
+  "edit": "编辑",
+  "@edit": {
+    "description": "编辑按钮"
+  },
+  "search": "搜索",
+  "@search": {
+    "description": "搜索功能"
+  },
+  "active": "活跃",
+  "@active": {
+    "description": "活跃状态"
+  },
+  "completed": "已完成",
+  "@completed": {
+    "description": "已完成状态"
+  },
+  "archived": "已归档",
+  "@archived": {
+    "description": "已归档状态"
+  },
+  "total": "总计",
+  "@total": {
+    "description": "总计统计"
+  },
+  "note": "笔记",
+  "@note": {
+    "description": "笔记类型"
+  },
+  "todo": "待办",
+  "@todo": {
+    "description": "待办类型"
+  },
+  "project": "项目",
+  "@project": {
+    "description": "项目类型"
+  },
+  "reminder": "提醒",
+  "@reminder": {
+    "description": "提醒类型"
+  },
+  "habit": "习惯",
+  "@habit": {
+    "description": "习惯类型"
+  },
+  "goal": "目标",
+  "@goal": {
+    "description": "目标类型"
+  },
+  "allTypes": "全部类型",
+  "@allTypes": {
+    "description": "全部类型过滤器"
+  },
+  "currentXP": "当前经验值",
+  "@currentXP": {
+    "description": "当前经验值标签"
+  },
+  "appDescription": "基于包驱动架构的模块化宠物管理应用",
+  "@appDescription": {
+    "description": "应用描述"
+  },
+  "moduleStatusTitle": "模块状态",
+  "@moduleStatusTitle": {
+    "description": "模块状态标题"
+  },
+  "notesHubDescription": "管理您的笔记和任务",
+  "@notesHubDescription": {
+    "description": "事务中心描述"
+  },
+  "workshopDescription": "记录您的创意和灵感",
+  "@workshopDescription": {
+    "description": "创意工坊描述"
+  },
+  "punchInDescription": "记录您的考勤时间",
+  "@punchInDescription": {
+    "description": "打卡中心描述"
+  },
+  "initializing": "正在初始化事务管理中心...",
+  "@initializing": {
+    "description": "初始化信息"
+  },
+  "searchHint": "搜索事务...",
+  "@searchHint": {
+    "description": "搜索框提示"
+  },
+  "priorityUrgent": "紧急",
+  "@priorityUrgent": {
+    "description": "优先级 - 紧急"
+  },
+  "priorityHigh": "高",
+  "@priorityHigh": {
+    "description": "优先级 - 高"
+  },
+  "priorityMedium": "中",
+  "@priorityMedium": {
+    "description": "优先级 - 中"
+  },
+  "priorityLow": "低",
+  "@priorityLow": {
+    "description": "优先级 - 低"
+  },
+  "createNew": "新建{itemType}",
+  "@createNew": {
+    "description": "创建新项目按钮",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "description": "项目类型"
+      }
+    }
+  },
+  "noItemsFound": "暂无{itemType}",
+  "@noItemsFound": {
+    "description": "空状态信息",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "description": "项目类型"
+      }
+    }
+  },
+  "createItemHint": "点击 + 按钮创建{itemType}",
+  "@createItemHint": {
+    "description": "创建提示",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "description": "项目类型"
+      }
+    }
+  },
+  "title": "标题",
+  "@title": {
+    "description": "标题字段"
+  },
+  "content": "内容",
+  "@content": {
+    "description": "内容字段"
+  },
+  "priority": "优先级",
+  "@priority": {
+    "description": "优先级字段"
+  },
+  "status": "状态",
+  "@status": {
+    "description": "状态字段"
+  },
+  "createdAt": "创建时间",
+  "@createdAt": {
+    "description": "创建时间字段"
+  },
+  "confirmDelete": "确认删除",
+  "@confirmDelete": {
+    "description": "删除确认标题"
+  },
+  "confirmDeleteMessage": "确定要删除\"{itemName}\"吗？此操作无法撤销。",
+  "@confirmDeleteMessage": {
+    "description": "删除确认信息",
+    "placeholders": {
+      "itemName": {
+        "type": "String",
+        "description": "要删除的项目名称"
+      }
+    }
+  },
+  "itemDeleted": "项目已删除",
+  "@itemDeleted": {
+    "description": "项目删除成功信息"
+  },
+  "newItemCreated": "已创建新的{itemType}",
+  "@newItemCreated": {
+    "description": "新项目创建成功信息",
+    "placeholders": {
+      "itemType": {
+        "type": "String",
+        "description": "项目类型"
+      }
+    }
+  },
+  "initializingWorkshop": "正在初始化创意工坊...",
+  "@initializingWorkshop": {
+    "description": "创意工坊初始化信息"
+  },
+  "noCreativeProjects": "暂无创意项目",
+  "@noCreativeProjects": {
+    "description": "创意工坊空状态信息"
+  },
+  "createNewCreativeProject": "点击右下角按钮创建新的创意项目",
+  "@createNewCreativeProject": {
+    "description": "创意工坊创建提示"
+  },
+  "newCreativeIdea": "新创意想法",
+  "@newCreativeIdea": {
+    "description": "默认新创意想法标题"
+  },
+  "newCreativeDescription": "这是一个新的创意想法",
+  "@newCreativeDescription": {
+    "description": "默认新创意想法描述"
+  },
+  "detailedCreativeContent": "详细的创意描述...",
+  "@detailedCreativeContent": {
+    "description": "默认新创意想法内容"
+  },
+  "creativeProjectCreated": "创意项目创建成功",
+  "@creativeProjectCreated": {
+    "description": "创意项目创建成功信息"
+  },
+  "editFunctionTodo": "编辑功能待实现",
+  "@editFunctionTodo": {
+    "description": "编辑功能待办信息"
+  },
+  "creativeProjectDeleted": "创意项目已删除",
+  "@creativeProjectDeleted": {
+    "description": "创意项目删除成功信息"
+  },
+  "initializingPunchIn": "正在初始化桌宠打卡系统...",
+  "@initializingPunchIn": {
+    "description": "打卡系统初始化信息"
+  },
+  "level": "等级",
+  "@level": {
+    "description": "等级标签"
+  },
+  "todayPunchIn": "今日打卡",
+  "@todayPunchIn": {
+    "description": "今日打卡标题"
+  },
+  "punchNow": "立即打卡",
+  "@punchNow": {
+    "description": "立即打卡按钮"
+  },
+  "dailyLimitReached": "今日打卡次数已达上限",
+  "@dailyLimitReached": {
+    "description": "每日限制达到信息"
+  },
+  "punchInStats": "打卡统计",
+  "@punchInStats": {
+    "description": "打卡统计标题"
+  },
+  "totalPunches": "总打卡次数",
+  "@totalPunches": {
+    "description": "总打卡次数统计"
+  },
+  "remainingToday": "今日剩余次数",
+  "@remainingToday": {
+    "description": "今日剩余次数"
+  },
+  "recentPunches": "最近打卡记录",
+  "@recentPunches": {
+    "description": "最近打卡记录标题"
+  },
+  "noPunchRecords": "暂无打卡记录",
+  "@noPunchRecords": {
+    "description": "无打卡记录信息"
+  },
+  "punchSuccessWithXP": "打卡成功！获得 {xp} 经验值",
+  "@punchSuccessWithXP": {
+    "description": "打卡成功信息",
+    "placeholders": {
+      "xp": {
+        "type": "int",
+        "description": "获得的经验值"
+      }
+    }
+  },
+  "lastPunchTime": "上次打卡：{time}",
+  "@lastPunchTime": {
+    "description": "上次打卡时间",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "description": "打卡时间"
+      }
+    }
+  },
+  "punchCount": "第 {count} 次打卡",
+  "@punchCount": {
+    "description": "打卡次数",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "打卡次数"
+      }
+    }
+  },
+  "coreFeatures": "核心功能",
+  "@coreFeatures": {
+    "description": "核心功能分组标题"
+  },
+  "builtinModules": "内置模块",
+  "@builtinModules": {
+    "description": "内置模块分组标题"
+  },
+  "extensionModules": "扩展模块",
+  "@extensionModules": {
+    "description": "扩展模块分组标题"
+  },
+  "system": "系统",
+  "@system": {
+    "description": "系统功能分组标题"
+  },
+  "versionInfo": "Phase 1 - v1.0.0",
+  "@versionInfo": {
+    "description": "版本信息"
+  },
+  "moduleStatus": "模块: {active}/{total} 活跃",
+  "@moduleStatus": {
+    "description": "模块状态信息",
+    "placeholders": {
+      "active": {
+        "type": "String",
+        "description": "活跃模块数量"
+      },
+      "total": {
+        "type": "String",
+        "description": "总模块数量"
+      }
+    }
+  },
+  "moduleManagement": "模块管理",
+  "@moduleManagement": {
+    "description": "模块管理功能"
+  },
+  "copyrightInfo": "© 2025 Pet Assistant\nPowered by Flutter",
+  "@copyrightInfo": {
+    "description": "版权信息"
+  },
+  "about": "关于",
+  "@about": {
+    "description": "关于页面"
+  },
+  "moduleManagementDialog": "模块管理",
+  "@moduleManagementDialog": {
+    "description": "模块管理对话框标题"
+  },
+  "moduleManagementTodo": "模块管理功能将在后续版本中实现",
+  "@moduleManagementTodo": {
+    "description": "模块管理待办信息"
+  }
+} 

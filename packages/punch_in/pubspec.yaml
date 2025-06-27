@@ -1,0 +1,21 @@
+name: punch_in
+description: 完整的考勤打卡模块 - 支持多种打卡方式、考勤统计、智能提醒和数据分析的综合考勤解决方案
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ^3.8.1
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  core_services:
+    path: ../core_services
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter: 
