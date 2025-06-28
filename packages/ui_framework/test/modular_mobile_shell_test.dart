@@ -239,6 +239,7 @@ void main() {
 
       // 验证locale回调被正确传递
       expect(localeChangeHandled, isFalse); // 初始状态
+      expect(receivedLocale, isNull); // 验证初始locale未设置
       
       // ModularMobileShell应该接收并正确处理locale change回调
       // 这里主要验证回调参数被正确传递，实际的语言切换需要外部触发

@@ -205,6 +205,7 @@ void main() {
       // 模拟语言切换（这需要在Shell内部触发）
       // 由于我们无法直接测试内部的语言切换，我们验证回调被正确传递
       expect(localeChangeHandled, isFalse); // 初始状态
+      expect(receivedLocale, isNull); // 验证初始未设置locale
       
       // 这里可以通过其他方式验证locale change回调的传递
       // 比如检查子Shell是否正确接收了onLocaleChanged回调

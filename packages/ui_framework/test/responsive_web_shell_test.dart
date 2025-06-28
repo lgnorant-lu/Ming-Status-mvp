@@ -210,6 +210,7 @@ void main() {
 
       // 验证locale回调被正确传递
       expect(localeChangeHandled, isFalse); // 初始状态
+      expect(receivedLocale, isNull); // 验证初始locale未设置
     });
 
     testWidgets('should show web-specific features', (WidgetTester tester) async {

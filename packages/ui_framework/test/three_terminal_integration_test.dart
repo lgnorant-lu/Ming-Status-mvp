@@ -244,6 +244,9 @@ void main() {
 
       await tester.pumpAndSettle();
 
+      // 验证初始locale状态
+      expect(lastReceivedLocale, isNull);
+
       // 切换模式，验证locale回调在所有Shell中都正确传递
       for (final mode in DisplayMode.values) {
         await displayModeService.switchToMode(mode);
