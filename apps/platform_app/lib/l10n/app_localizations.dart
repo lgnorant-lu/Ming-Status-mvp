@@ -422,12 +422,6 @@ abstract class AppLocalizations {
   /// **'创意项目创建成功'**
   String get creativeProjectCreated;
 
-  /// 编辑功能待办信息
-  ///
-  /// In zh, this message translates to:
-  /// **'编辑功能待实现'**
-  String get editFunctionTodo;
-
   /// 创意项目删除成功信息
   ///
   /// In zh, this message translates to:

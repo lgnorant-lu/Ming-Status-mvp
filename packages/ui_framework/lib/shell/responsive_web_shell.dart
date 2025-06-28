@@ -13,7 +13,9 @@ Change History:
 */
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ui_framework/ui_framework.dart';
+import 'package:core_services/core_services.dart';
 
 /// ResponsiveWebShell - Web端响应式外壳
 /// 
@@ -39,6 +41,21 @@ class _ResponsiveWebShellState extends State<ResponsiveWebShell> {
   
   // 默认中文本地化（回退方案）
   MainShellLocalizations get localizations => widget.localizations ?? _getDefaultLocalizations();
+
+  /// 便捷翻译方法 - 从app_routing包获取翻译
+  String _t(String key) {
+    try {
+      final translated = I18nService.instance.translate(key, packageName: 'app_routing');
+      // 如果翻译不是键值本身（说明找到了翻译），则返回翻译
+      if (translated != key) {
+        return translated;
+      }
+    } catch (e) {
+      // I18nService可能未初始化，忽略错误
+    }
+    // 回退策略：返回key本身
+    return key;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,23 +137,26 @@ class _ResponsiveWebShellState extends State<ResponsiveWebShell> {
       height: 80,
       padding: const EdgeInsets.all(16),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          // 应用图标
-          Container(
+          // 应用图标 - 固定大小以避免溢出
+          SizedBox(
             width: 40,
             height: 40,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(
-              Icons.pets,
-              color: Theme.of(context).colorScheme.onPrimary,
-              size: 24,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                Icons.pets,
+                color: Theme.of(context).colorScheme.onPrimary,
+                size: 24,
+              ),
             ),
           ),
           
-          // 应用标题
+          // 应用标题 - 只在展开状态显示，并加入防溢出保护
           if (!isCollapsed) ...[
             const SizedBox(width: 12),
             Expanded(
@@ -149,12 +169,16 @@ class _ResponsiveWebShellState extends State<ResponsiveWebShell> {
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                   Text(
-                    'Web端',
+                    'Web',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
                     ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                 ],
               ),
@@ -225,42 +249,68 @@ class _ResponsiveWebShellState extends State<ResponsiveWebShell> {
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          // 折叠/展开按钮
-          if (!isCollapsed)
+          // 展开状态下的按钮区域
+          if (!isCollapsed) ...[
+            // 设置按钮
             SizedBox(
               width: double.infinity,
-              child: OutlinedButton.icon(
-                onPressed: _toggleSidebar,
-                icon: const Icon(Icons.menu_open),
-                label: const Text('折叠侧栏'),
-              ),
-            )
-          else
-            IconButton(
-              onPressed: _toggleSidebar,
-              icon: const Icon(Icons.menu),
-              tooltip: '展开侧栏',
-            ),
-          
-          const SizedBox(height: 8),
-          
-          // 设置按钮
-          if (!isCollapsed)
-            SizedBox(
-              width: double.infinity,
+              height: 40,
               child: TextButton.icon(
                 onPressed: _showSettings,
-                icon: const Icon(Icons.settings),
-                label: Text(localizations.settings),
+                icon: const Icon(Icons.settings, size: 20),
+                label: Text(
+                  localizations.settings,
+                  style: const TextStyle(fontSize: 14),
+                ),
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  alignment: Alignment.centerLeft,
+                ),
               ),
-            )
-          else
-            IconButton(
-              onPressed: _showSettings,
-              icon: const Icon(Icons.settings),
-              tooltip: localizations.settings,
             ),
+            const SizedBox(height: 8),
+            // 折叠按钮
+            SizedBox(
+              width: double.infinity,
+              height: 40,
+              child: OutlinedButton.icon(
+                onPressed: _toggleSidebar,
+                icon: const Icon(Icons.chevron_left, size: 20),
+                label: Text(
+                  _t('collapse_sidebar'),
+                  style: const TextStyle(fontSize: 14),
+                ),
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  alignment: Alignment.centerLeft,
+                ),
+              ),
+            ),
+          ]
+          // 折叠状态下的图标按钮
+          else ...[
+            // 设置按钮
+            Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              child: IconButton(
+                onPressed: _showSettings,
+                icon: const Icon(Icons.settings),
+                tooltip: localizations.settings,
+                iconSize: 24,
+                padding: const EdgeInsets.all(12),
+              ),
+            ),
+            // 展开按钮
+            IconButton(
+              onPressed: _toggleSidebar,
+              icon: const Icon(Icons.chevron_right),
+              tooltip: _t('expand_sidebar'),
+              iconSize: 24,
+              padding: const EdgeInsets.all(12),
+            ),
+          ],
         ],
       ),
     );
@@ -303,7 +353,7 @@ class _ResponsiveWebShellState extends State<ResponsiveWebShell> {
             SizedBox(
               width: 300,
               child: SearchBar(
-                hintText: '搜索...',
+                hintText: localizations.searchHint,
                 leading: const Icon(Icons.search),
                 onTap: _showSearch,
               ),
@@ -315,7 +365,7 @@ class _ResponsiveWebShellState extends State<ResponsiveWebShell> {
           IconButton(
             icon: const Icon(Icons.language),
             onPressed: _showLanguageDialog,
-            tooltip: '切换语言',
+            tooltip: _t('toggle_language'),
           ),
           
           // 用户菜单
@@ -327,28 +377,28 @@ class _ResponsiveWebShellState extends State<ResponsiveWebShell> {
             ),
             onSelected: _handleUserMenuSelection,
             itemBuilder: (context) => [
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'profile',
                 child: ListTile(
-                  leading: Icon(Icons.person),
-                  title: Text('个人资料'),
+                  leading: const Icon(Icons.person),
+                  title: Text(_t('user_profile')),
                   contentPadding: EdgeInsets.zero,
                 ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'settings',
                 child: ListTile(
-                  leading: Icon(Icons.settings),
-                  title: Text('设置'),
+                  leading: const Icon(Icons.settings),
+                  title: Text(localizations.settings),
                   contentPadding: EdgeInsets.zero,
                 ),
               ),
               const PopupMenuDivider(),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'about',
                 child: ListTile(
-                  leading: Icon(Icons.info),
-                  title: Text('关于'),
+                  leading: const Icon(Icons.info),
+                  title: Text(localizations.about),
                   contentPadding: EdgeInsets.zero,
                 ),
               ),
@@ -419,9 +469,14 @@ class _ResponsiveWebShellState extends State<ResponsiveWebShell> {
   /// 获取当前模块Widget
   Widget _getCurrentModuleWidget() {
     if (_selectedIndex >= 0 && _selectedIndex < widget.modules.length) {
-      return widget.modules[_selectedIndex].widgetBuilder(context);
+      final module = widget.modules[_selectedIndex];
+      if (module.widgetBuilder != null) {
+        return module.widgetBuilder!(context);
+      } else {
+        return Center(child: Text('${module.name} 模块暂未实现'));
+      }
     }
-    return const Center(child: Text('模块未找到'));
+    return Center(child: Text(_t('module_not_found')));
   }
 
   /// 获取页面标题
@@ -457,14 +512,15 @@ class _ResponsiveWebShellState extends State<ResponsiveWebShell> {
   }
 
   void _showSettings() {
-    // TODO: 实现设置页面
+    // 使用AppRouter导航到设置页面
+    context.go('/settings');
   }
 
   void _showLanguageDialog() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('选择语言'),
+        title: Text(_t('select_language')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -491,15 +547,58 @@ class _ResponsiveWebShellState extends State<ResponsiveWebShell> {
   void _handleUserMenuSelection(String value) {
     switch (value) {
       case 'profile':
-        // TODO: 导航到个人资料
+        // 显示个人资料对话框（暂时用对话框替代页面）
+        _showProfileDialog();
         break;
       case 'settings':
         _showSettings();
         break;
       case 'about':
-        // TODO: 显示关于对话框
+        _showAboutDialog();
         break;
     }
+  }
+
+  void _showProfileDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+         title: Text(_t('user_profile')),
+         content: Text(_t('profile_feature_coming')),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(localizations.close),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showAboutDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(localizations.about),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(localizations.appTitle),
+            const SizedBox(height: 8),
+            Text(localizations.appDescription),
+            const SizedBox(height: 16),
+            Text(localizations.versionInfo),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(localizations.close),
+          ),
+        ],
+      ),
+    );
   }
 
   /// 获取默认本地化
@@ -566,7 +665,6 @@ class _ResponsiveWebShellState extends State<ResponsiveWebShell> {
       newCreativeDescription: '描述创意想法',
       detailedCreativeContent: '创意详细内容',
       creativeProjectCreated: '创意项目已创建',
-      editFunctionTodo: '编辑功能待实现',
       creativeProjectDeleted: '创意项目已删除',
       initializingPunchIn: '正在初始化打卡...',
       currentXP: '当前经验值',

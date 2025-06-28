@@ -15,7 +15,9 @@ Change History:
 
 import 'package:flutter/material.dart';
 import 'package:core_services/core_services.dart' hide ItemType, ItemStatus;
+import 'package:ui_framework/ui_framework.dart';
 import 'notes_hub_module.dart';
+import 'l10n/notes_hub_l10n.dart';
 
 /// 业务模块本地化数据类
 class BusinessModuleLocalizations {
@@ -130,62 +132,19 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
   String _searchQuery = '';
   ItemType _selectedType = ItemType.note;
 
-  // 默认中文本地化（回退方案）
-  BusinessModuleLocalizations get localizations => widget.localizations ?? const BusinessModuleLocalizations(
-    notesHubTitle: '事务中心',
-    workshopTitle: '创意工坊',
-    punchInTitle: '打卡',
-    note: '笔记',
-    todo: '待办',
-    project: '项目',
-    reminder: '提醒',
-    habit: '习惯',
-    goal: '目标',
-    allTypes: '全部类型',
-    total: '总计',
-    active: '活跃',
-    completed: '已完成',
-    archived: '已归档',
-    searchHint: '搜索事务...',
-    initializing: '正在初始化事务管理中心...',
-    priorityUrgent: '紧急',
-    priorityHigh: '高',
-    priorityMedium: '中',
-    priorityLow: '低',
-    createNew: '新建{itemType}',
-    noItemsFound: '暂无{itemType}',
-    createItemHint: '点击 + 按钮创建{itemType}',
-    confirmDelete: '确认删除',
-    confirmDeleteMessage: '确定要删除"{itemName}"吗？此操作无法撤销。',
-    itemDeleted: '项目已删除',
-    newItemCreated: '已创建新的{itemType}',
-    save: '保存',
-    cancel: '取消',
-    edit: '编辑',
-    delete: '删除',
-    title: '标题',
-    content: '内容',
-    priority: '优先级',
-    status: '状态',
-    createdAt: '创建时间',
-    updatedAt: '更新时间',
-    dueDate: '截止日期',
-    tags: '标签',
-    close: '关闭',
-    createFailed: '创建失败',
-    deleteSuccess: '事务删除成功',
-    deleteFailed: '删除失败',
-    itemNotFound: '事务不存在',
-  );
+  /// 便捷翻译方法 - Phase 2.2 Sprint 2 使用分布式i18n系统
+  String _t(String key) {
+    return NotesHubL10n.t(key);
+  }
 
   // 定义事务类型标签
   List<Map<String, dynamic>> get _typeTabs => [
-    {'type': ItemType.note, 'label': localizations.note, 'icon': Icons.note},
-    {'type': ItemType.todo, 'label': localizations.todo, 'icon': Icons.check_box},
-    {'type': ItemType.project, 'label': localizations.project, 'icon': Icons.folder_open},
-    {'type': ItemType.reminder, 'label': localizations.reminder, 'icon': Icons.alarm},
-    {'type': ItemType.habit, 'label': localizations.habit, 'icon': Icons.loop},
-    {'type': ItemType.goal, 'label': localizations.goal, 'icon': Icons.flag},
+    {'type': ItemType.note, 'label': _t('note'), 'icon': Icons.note},
+    {'type': ItemType.todo, 'label': _t('todo'), 'icon': Icons.check_box},
+    {'type': ItemType.project, 'label': _t('project'), 'icon': Icons.folder_open},
+    {'type': ItemType.reminder, 'label': _t('reminder'), 'icon': Icons.alarm},
+    {'type': ItemType.habit, 'label': _t('habit'), 'icon': Icons.loop},
+    {'type': ItemType.goal, 'label': _t('goal'), 'icon': Icons.flag},
   ];
 
   @override
@@ -243,7 +202,7 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
             children: [
               const CircularProgressIndicator(),
               const SizedBox(height: 16),
-              Text(localizations.initializing),
+              Text(_t('initializing')),
             ],
           ),
         ),
@@ -268,7 +227,7 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      title: Text(localizations.notesHubTitle),
+      title: Text(_t('notes_hub_title')),
       backgroundColor: Colors.transparent,
       elevation: 0,
       flexibleSpace: Container(
@@ -310,7 +269,7 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
       ),
       child: TextField(
         decoration: InputDecoration(
-          hintText: localizations.searchHint,
+          hintText: _t('search_hint'),
           prefixIcon: const Icon(Icons.search, color: Color(0xFF667eea)),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.all(16),
@@ -344,10 +303,10 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildStatItem(localizations.total, '${stats['totalItems']}', Icons.all_inbox, Colors.blue),
-          _buildStatItem(localizations.active, '${stats['activeItems']}', Icons.play_circle, Colors.green),
-          _buildStatItem(localizations.completed, '${stats['completedItems']}', Icons.check_circle, Colors.orange),
-          _buildStatItem(localizations.archived, '${stats['archivedItems']}', Icons.archive, Colors.grey),
+          _buildStatItem(_t('total'), '${stats['totalItems']}', Icons.all_inbox, Colors.blue),
+          _buildStatItem(_t('active'), '${stats['activeItems']}', Icons.play_circle, Colors.green),
+          _buildStatItem(_t('completed'), '${stats['completedItems']}', Icons.check_circle, Colors.orange),
+          _buildStatItem(_t('archived'), '${stats['archivedItems']}', Icons.archive, Colors.grey),
         ],
       ),
     );
@@ -430,7 +389,7 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
           ),
           const SizedBox(height: 16),
           Text(
-            localizations.noItemsFound.replaceAll('{itemType}', typeInfo['label'] as String),
+            _t('no_items_found').replaceAll('{itemType}', typeInfo['label'] as String),
             style: const TextStyle(
               fontSize: 18,
               color: Colors.grey,
@@ -438,7 +397,7 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
           ),
           const SizedBox(height: 8),
           Text(
-            localizations.createItemHint.replaceAll('{itemType}', typeInfo['label'] as String),
+            _t('create_item_hint').replaceAll('{itemType}', typeInfo['label'] as String),
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey.shade500,
@@ -547,19 +506,19 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
     switch (priority) {
       case ItemPriority.urgent:
         color = Colors.red;
-        label = localizations.priorityUrgent;
+        label = _t('priority_urgent');
         break;
       case ItemPriority.high:
         color = Colors.orange;
-        label = localizations.priorityHigh;
+        label = _t('priority_high');
         break;
       case ItemPriority.medium:
         color = Colors.blue;
-        label = localizations.priorityMedium;
+        label = _t('priority_medium');
         break;
       case ItemPriority.low:
         color = Colors.grey;
-        label = localizations.priorityLow;
+        label = _t('priority_low');
         break;
     }
     
@@ -588,22 +547,22 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
     switch (status) {
       case ItemStatus.active:
         color = Colors.green;
-        label = localizations.active;
+        label = _t('active');
         icon = Icons.play_circle;
         break;
       case ItemStatus.completed:
         color = Colors.blue;
-        label = localizations.completed;
+        label = _t('completed');
         icon = Icons.check_circle;
         break;
       case ItemStatus.archived:
         color = Colors.grey;
-        label = localizations.archived;
+        label = _t('archived');
         icon = Icons.archive;
         break;
       case ItemStatus.deleted:
         color = Colors.red;
-        label = localizations.delete;
+        label = _t('delete');
         icon = Icons.delete;
         break;
     }
@@ -639,7 +598,7 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
       onPressed: () => _showCreateDialog(_selectedType),
       backgroundColor: const Color(0xFF667eea),
       icon: Icon(typeInfo['icon'] as IconData),
-      label: Text(localizations.createNew.replaceAll('{itemType}', typeInfo['label'] as String)),
+      label: Text(_t('create_new').replaceAll('{itemType}', typeInfo['label'] as String)),
     );
   }
 
@@ -658,7 +617,7 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
             children: [
               Icon(typeInfo['icon'] as IconData, color: const Color(0xFF667eea)),
               const SizedBox(width: 8),
-              Text(localizations.createNew.replaceAll('{itemType}', typeInfo['label'] as String)),
+              Text(_t('create_new').replaceAll('{itemType}', typeInfo['label'] as String)),
             ],
           ),
           content: SizedBox(
@@ -669,7 +628,7 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
                 TextField(
                   controller: titleController,
                   decoration: InputDecoration(
-                    labelText: localizations.title,
+                    labelText: _t('title'),
                     border: const OutlineInputBorder(),
                   ),
                   maxLines: 1,
@@ -678,7 +637,7 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
                 TextField(
                   controller: contentController,
                   decoration: InputDecoration(
-                    labelText: localizations.content,
+                    labelText: _t('content'),
                     border: const OutlineInputBorder(),
                   ),
                   maxLines: 3,
@@ -690,7 +649,7 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
                       child: DropdownButtonFormField<ItemPriority>(
                         value: selectedPriority,
                         decoration: InputDecoration(
-                          labelText: localizations.priority,
+                          labelText: _t('priority'),
                           border: const OutlineInputBorder(),
                         ),
                         items: ItemPriority.values.map((priority) => DropdownMenuItem(
@@ -725,7 +684,7 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
                         icon: const Icon(Icons.event),
                         label: Text(selectedDueDate != null 
                           ? _formatDateTime(selectedDueDate!) 
-                          : localizations.dueDate),
+                          : _t('due_date')),
                       ),
                     ),
                   ],
@@ -736,7 +695,7 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text(localizations.cancel),
+              child: Text(_t('cancel')),
             ),
             ElevatedButton(
               onPressed: () {
@@ -755,7 +714,7 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
                 backgroundColor: const Color(0xFF667eea),
                 foregroundColor: Colors.white,
               ),
-              child: Text(localizations.save),
+              child: Text(_t('save')),
             ),
           ],
         ),
@@ -774,28 +733,28 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
             mainAxisSize: MainAxisSize.min,
             children: [
               if (item.content.isNotEmpty) ...[
-                Text('${localizations.content}:', style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text('${_t('content')}:', style: const TextStyle(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 4),
                 Text(item.content),
                 const SizedBox(height: 16),
               ],
               Row(
                 children: [
-                  Text('${localizations.priority}: ', style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Text('${_t('priority')}: ', style: const TextStyle(fontWeight: FontWeight.bold)),
                   _buildPriorityChip(item.priority),
                   const SizedBox(width: 16),
-                  Text('${localizations.status}: ', style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Text('${_t('status')}: ', style: const TextStyle(fontWeight: FontWeight.bold)),
                   _buildStatusChip(item.status),
                 ],
               ),
               const SizedBox(height: 16),
-              Text('${localizations.createdAt}: ${_formatDateTime(item.createdAt)}'),
-              Text('${localizations.updatedAt}: ${_formatDateTime(item.updatedAt)}'),
+              Text('${_t('created_at')}: ${_formatDateTime(item.createdAt)}'),
+              Text('${_t('updated_at')}: ${_formatDateTime(item.updatedAt)}'),
               if (item.dueDate != null) 
-                Text('${localizations.dueDate}: ${_formatDateTime(item.dueDate!)}'),
+                Text('${_t('due_date')}: ${_formatDateTime(item.dueDate!)}'),
               if (item.tags.isNotEmpty) ...[
                 const SizedBox(height: 8),
-                Text('${localizations.tags}:', style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text('${_t('tags')}:', style: const TextStyle(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 4),
                 Wrap(
                   spacing: 4,
@@ -805,13 +764,21 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
                   )).toList(),
                 ),
               ],
-            ],
+            ],  
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: Text(localizations.close),
+            child: Text(_t('close')),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _editItem(item);
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF667eea)),
+            child: Text(_t('edit')),
           ),
           ElevatedButton(
             onPressed: () {
@@ -819,7 +786,7 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
               _deleteItem(item.id);
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: Text(localizations.delete),
+            child: Text(_t('delete')),
           ),
         ],
       ),
@@ -846,18 +813,54 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
       
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(localizations.newItemCreated.replaceAll('{itemType}', _getTypeLabel(type))),
+          content: Text(_t('new_item_created').replaceAll('{itemType}', _getTypeLabel(type))),
           backgroundColor: Colors.green,
         ),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('${localizations.createFailed}: $e'),
+          content: Text('${_t('create_failed')}: $e'),
           backgroundColor: Colors.red,
         ),
       );
     }
+  }
+
+  void _editItem(NotesHubItem item) {
+    showDialog(
+      context: context,
+      builder: (context) => UniversalEditDialog(
+        item: item,
+        itemType: EditItemType.note, // NotesHub uses generic note type for all items
+        onSave: (editedItem) {
+          // Update the item using the module's updateItem method
+          final success = _module.updateItem(
+            editedItem.id,
+            title: editedItem.title,
+            content: editedItem.content,
+            tags: editedItem.tags,
+          );
+          
+          if (success) {
+            setState(() {});
+                    ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(_t('item_updated_success').replaceAll('{itemType}', _getTypeLabel(item.type))),
+            backgroundColor: Colors.green,
+          ),
+        );
+          } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(_t('edit_failed_item_not_found')),
+            backgroundColor: Colors.red,
+          ),
+        );
+          }
+        },
+      ),
+    );
   }
 
   void _deleteItem(String itemId) {
@@ -869,14 +872,14 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
         
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(localizations.deleteSuccess),
+            content: Text(_t('delete_success')),
             backgroundColor: Colors.green,
           ),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${localizations.deleteFailed}，${localizations.itemNotFound}'),
+            content: Text('${_t('delete_failed')}，${_t('item_not_found')}'),
             backgroundColor: Colors.red,
           ),
         );
@@ -884,7 +887,7 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('${localizations.deleteFailed}: $e'),
+          content: Text('${_t('delete_failed')}: $e'),
           backgroundColor: Colors.red,
         ),
       );
@@ -898,13 +901,13 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
   String _getPriorityLabel(ItemPriority priority) {
     switch (priority) {
       case ItemPriority.urgent:
-        return localizations.priorityUrgent;
+        return _t('priority_urgent');
       case ItemPriority.high:
-        return localizations.priorityHigh;
+        return _t('priority_high');
       case ItemPriority.medium:
-        return localizations.priorityMedium;
+        return _t('priority_medium');
       case ItemPriority.low:
-        return localizations.priorityLow;
+        return _t('priority_low');
     }
   }
 
@@ -913,11 +916,11 @@ class _NotesHubWidgetState extends State<NotesHubWidget>
     final difference = now.difference(dateTime);
     
     if (difference.inDays == 0) {
-      return '今天 ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+      return '${_t('today')} ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
     } else if (difference.inDays == 1) {
-      return '昨天';
+      return _t('yesterday');
     } else if (difference.inDays < 7) {
-      return '${difference.inDays}天前';
+      return _t('days_ago').replaceAll('{days}', '${difference.inDays}');
     } else {
       return '${dateTime.month}/${dateTime.day}';
     }

@@ -481,14 +481,14 @@ class _AdaptiveNavigationDrawerState extends State<AdaptiveNavigationDrawer> {
           // 设置按钮
           IconButton(
             icon: const Icon(Icons.settings_outlined),
-            onPressed: () => context.go(routes.RoutePaths.settings),
+            onPressed: () => context.go('/settings'),
             tooltip: widget.localizations.settings,
           ),
           
           // 关于按钮
           IconButton(
             icon: const Icon(Icons.info_outline),
-            onPressed: () => context.go(routes.RoutePaths.about),
+            onPressed: () => context.go('/about'),
             tooltip: widget.localizations.about,
           ),
           

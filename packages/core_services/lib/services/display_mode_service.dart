@@ -16,6 +16,8 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'i18n_service.dart';
+
 /// 显示模式枚举
 /// 定义应用支持的三种显示模式，与AppShell的ShellType对应
 enum DisplayMode {
@@ -31,8 +33,23 @@ enum DisplayMode {
 
 /// 显示模式扩展方法
 extension DisplayModeExtension on DisplayMode {
-  /// 获取显示模式的显示名称
+  /// 获取显示模式的显示名称（支持国际化）
   String get displayName {
+    try {
+      // 尝试从I18nService获取翻译
+      final i18nService = I18nService.instance;
+      final translationKey = 'display_mode_${identifier}';
+      final translated = i18nService.translate(translationKey, packageName: 'app_routing');
+      
+      // 如果翻译不是键值本身（说明找到了翻译），则返回翻译
+      if (translated != translationKey) {
+        return translated;
+      }
+    } catch (e) {
+      // I18nService可能未初始化，忽略错误
+    }
+    
+    // 回退到中文硬编码（默认语言）
     switch (this) {
       case DisplayMode.desktop:
         return '桌面模式';
@@ -43,8 +60,23 @@ extension DisplayModeExtension on DisplayMode {
     }
   }
   
-  /// 获取显示模式的描述
+  /// 获取显示模式的描述（支持国际化）
   String get description {
+    try {
+      // 尝试从I18nService获取翻译
+      final i18nService = I18nService.instance;
+      final translationKey = 'display_mode_${identifier}_desc';
+      final translated = i18nService.translate(translationKey, packageName: 'app_routing');
+      
+      // 如果翻译不是键值本身（说明找到了翻译），则返回翻译
+      if (translated != translationKey) {
+        return translated;
+      }
+    } catch (e) {
+      // I18nService可能未初始化，忽略错误
+    }
+    
+    // 回退到中文硬编码（默认语言）
     switch (this) {
       case DisplayMode.desktop:
         return 'PC端空间化桌面环境，模块以独立浮动窗口形式存在';

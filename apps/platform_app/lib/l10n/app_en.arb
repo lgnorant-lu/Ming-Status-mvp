@@ -246,10 +246,7 @@
   "@creativeProjectCreated": {
     "description": "Creative project creation success message"
   },
-  "editFunctionTodo": "Edit function to be implemented",
-  "@editFunctionTodo": {
-    "description": "Edit function todo message"
-  },
+
   "creativeProjectDeleted": "Creative project deleted",
   "@creativeProjectDeleted": {
     "description": "Creative project deletion success message"

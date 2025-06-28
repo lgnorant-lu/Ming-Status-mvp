@@ -246,10 +246,7 @@
   "@creativeProjectCreated": {
     "description": "创意项目创建成功信息"
   },
-  "editFunctionTodo": "编辑功能待实现",
-  "@editFunctionTodo": {
-    "description": "编辑功能待办信息"
-  },
+
   "creativeProjectDeleted": "创意项目已删除",
   "@creativeProjectDeleted": {
     "description": "创意项目删除成功信息"

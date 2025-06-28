@@ -183,9 +183,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get creativeProjectCreated => 'Creative project created successfully';
 
   @override
-  String get editFunctionTodo => 'Edit function to be implemented';
-
-  @override
   String get creativeProjectDeleted => 'Creative project deleted';
 
   @override

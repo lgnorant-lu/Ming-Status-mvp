@@ -42,10 +42,13 @@ export 'services/logging_service.dart';
 export 'services/error_handling_service.dart';
 export 'services/performance_monitoring_service.dart';
 export 'services/display_mode_service.dart';
+export 'services/locale_service.dart';
+export 'services/i18n_service.dart';
 
 // 导出存储库服务
 export 'services/repositories/persistence_repository.dart';
 export 'services/repositories/in_memory_repository.dart';
+export 'services/repositories/drift_persistence_repository.dart';
 
 // 导出安全服务
 export 'services/security/encryption_service.dart';

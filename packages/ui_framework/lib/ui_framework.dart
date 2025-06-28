@@ -15,5 +15,14 @@ export 'shell/responsive_web_shell.dart';
 export 'shell/display_mode_aware_shell.dart';
 export 'shell/modular_mobile_shell.dart';
 
+// Pages
+export 'pages/settings_page.dart';
+
+// Components
+export 'components/edit_dialog.dart';
+
 // 核心服务
-export 'core/theme_service.dart'; 
+export 'core/theme_service.dart';
+
+// 国际化
+export 'l10n/ui_l10n.dart'; 

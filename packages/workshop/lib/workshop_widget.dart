@@ -14,7 +14,9 @@ Change History:
 
 import 'package:flutter/material.dart';
 import 'package:core_services/core_services.dart';
+import 'package:ui_framework/ui_framework.dart';
 import 'workshop_module.dart';
+import 'l10n/workshop_l10n.dart';
 
 enum CreativeType { idea, design, prototype, art, writing, music, video, code }
 enum ProjectStatus { draft, inProgress, published, archived }
@@ -60,7 +62,7 @@ class WorkshopLocalizations {
   final String newCreativeDescription;
   final String detailedCreativeContent;
   final String creativeProjectCreated;
-  final String editFunctionTodo;
+
   final String creativeProjectDeleted;
   final String edit;
   final String delete;
@@ -78,7 +80,6 @@ class WorkshopLocalizations {
     required this.newCreativeDescription,
     required this.detailedCreativeContent,
     required this.creativeProjectCreated,
-    required this.editFunctionTodo,
     required this.creativeProjectDeleted,
     required this.edit,
     required this.delete,
@@ -99,25 +100,10 @@ class _WorkshopWidgetState extends State<WorkshopWidget> {
   late WorkshopModule _module;
   bool _isInitialized = false;
 
-  // 默认中文本地化（回退方案）
-  WorkshopLocalizations get localizations => widget.localizations ?? const WorkshopLocalizations(
-    workshopTitle: '创意工坊',
-    initializing: '正在初始化创意工坊...',
-    total: '总计',
-    active: '活跃',
-    completed: '已完成',
-    archived: '已归档',
-    noCreativeProjects: '暂无创意项目',
-    createNewCreativeProject: '点击右下角按钮创建新的创意项目',
-    newCreativeIdea: '新创意想法',
-    newCreativeDescription: '这是一个新的创意想法',
-    detailedCreativeContent: '详细的创意描述...',
-    creativeProjectCreated: '创意项目创建成功',
-    editFunctionTodo: '编辑功能待实现',
-    creativeProjectDeleted: '创意项目已删除',
-    edit: '编辑',
-    delete: '删除',
-  );
+  /// 便捷翻译方法 - Phase 2.2 Sprint 2 使用分布式i18n系统
+  String _t(String key) {
+    return WorkshopL10n.t(key);
+  }
 
   @override
   void initState() {
@@ -160,7 +146,7 @@ class _WorkshopWidgetState extends State<WorkshopWidget> {
             children: [
               const CircularProgressIndicator(),
               const SizedBox(height: 16),
-              Text(localizations.initializing),
+              Text(_t('initializing')),
             ],
           ),
         ),
@@ -180,7 +166,7 @@ class _WorkshopWidgetState extends State<WorkshopWidget> {
 
   AppBar _buildAppBar() {
     return AppBar(
-      title: Text(localizations.workshopTitle),
+      title: Text(_t('workshop_title')),
       backgroundColor: Colors.transparent,
       elevation: 0,
       flexibleSpace: Container(
@@ -211,9 +197,9 @@ class _WorkshopWidgetState extends State<WorkshopWidget> {
           children: [
             const Icon(Icons.lightbulb_outline, size: 64, color: Colors.grey),
             const SizedBox(height: 16),
-            Text(localizations.noCreativeProjects, style: const TextStyle(fontSize: 18)),
+            Text(_t('no_creative_projects'), style: const TextStyle(fontSize: 18)),
             const SizedBox(height: 8),
-            Text(localizations.createNewCreativeProject, style: const TextStyle(color: Colors.grey)),
+            Text(_t('create_new_creative_project'), style: const TextStyle(color: Colors.grey)),
           ],
         ),
       );
@@ -252,11 +238,11 @@ class _WorkshopWidgetState extends State<WorkshopWidget> {
               itemBuilder: (context) => [
                 PopupMenuItem(
                   value: 'edit',
-                  child: Text(localizations.edit),
+                  child: Text(_t('edit')),
                 ),
                 PopupMenuItem(
                   value: 'delete',
-                  child: Text(localizations.delete),
+                  child: Text(_t('delete')),
                 ),
               ],
             ),
@@ -269,33 +255,61 @@ class _WorkshopWidgetState extends State<WorkshopWidget> {
   void _addNewItem() {
     _module.createItem(
       type: CreativeItemType.idea,
-      title: localizations.newCreativeIdea,
-      description: localizations.newCreativeDescription,
-      content: localizations.detailedCreativeContent,
+      title: _t('new_creative_idea'),
+      description: _t('new_creative_description'),
+      content: _t('detailed_creative_content'),
     );
     
     setState(() {});
     
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(localizations.creativeProjectCreated)),
+      SnackBar(content: Text(_t('creative_project_created'))),
     );
   }
 
   void _handleItemAction(String action, CreativeItem item) {
     switch (action) {
       case 'edit':
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(localizations.editFunctionTodo)),
-        );
+        _editItem(item);
         break;
       case 'delete':
         _module.deleteItem(item.id);
         setState(() {});
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(localizations.creativeProjectDeleted)),
+          SnackBar(content: Text(_t('creative_project_deleted'))),
         );
         break;
     }
+  }
+
+  /// 编辑创意项目
+  void _editItem(CreativeItem item) {
+    showEditDialog<CreativeItem>(
+      context: context,
+      item: item,
+      itemType: EditItemType.creative,
+      onSave: (editedItem) {
+        // 更新模块中的数据
+        _module.updateItem(
+          editedItem.id,
+          title: editedItem.title,
+          description: editedItem.description,
+          content: editedItem.content,
+          tags: editedItem.tags,
+        );
+        
+        // 刷新UI
+        setState(() {});
+        
+        // 显示成功消息
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(_t('creative_project_updated'))),
+        );
+      },
+      dialogTitle: _t('edit_creative_project'),
+      showTagsEditor: true,
+      showDescription: true,
+    );
   }
 
   void _toggleSearch() {

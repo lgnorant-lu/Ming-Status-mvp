@@ -181,9 +181,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get creativeProjectCreated => '创意项目创建成功';
 
   @override
-  String get editFunctionTodo => '编辑功能待实现';
-
-  @override
   String get creativeProjectDeleted => '创意项目已删除';
 
   @override

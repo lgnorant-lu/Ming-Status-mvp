@@ -90,7 +90,7 @@ class MainShellLocalizations {
   final String newCreativeDescription;
   final String detailedCreativeContent;
   final String creativeProjectCreated;
-  final String editFunctionTodo;
+
   final String creativeProjectDeleted;
   
   // 打卡模块本地化字段
@@ -184,7 +184,6 @@ class MainShellLocalizations {
     required this.newCreativeDescription,
     required this.detailedCreativeContent,
     required this.creativeProjectCreated,
-    required this.editFunctionTodo,
     required this.creativeProjectDeleted,
     required this.initializingPunchIn,
     required this.currentXP,
@@ -289,10 +288,9 @@ class _MainShellState extends State<MainShell> {
     createNewCreativeProject: '新建创意项目',
     newCreativeIdea: '新创意想法',
     newCreativeDescription: '描述创意想法',
-    detailedCreativeContent: '创意详细内容',
-    creativeProjectCreated: '创意项目已创建',
-    editFunctionTodo: '编辑创意项目',
-    creativeProjectDeleted: '创意项目已删除',
+          detailedCreativeContent: '创意详细内容',
+      creativeProjectCreated: '创意项目已创建',
+      creativeProjectDeleted: '创意项目已删除',
     initializingPunchIn: '正在初始化打卡...',
     currentXP: '当前经验值',
     level: '等级',
@@ -408,7 +406,6 @@ class _MainShellState extends State<MainShell> {
       newCreativeDescription: localizations.newCreativeDescription,
       detailedCreativeContent: localizations.detailedCreativeContent,
       creativeProjectCreated: localizations.creativeProjectCreated,
-      editFunctionTodo: localizations.editFunctionTodo,
       creativeProjectDeleted: localizations.creativeProjectDeleted,
       edit: localizations.edit,
       delete: localizations.delete,

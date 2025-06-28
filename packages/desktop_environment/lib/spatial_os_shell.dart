@@ -11,8 +11,10 @@ Change History:
 ---------------------------------------------------------------
 */
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_framework/ui_framework.dart';
+import 'package:core_services/core_services.dart';
 import 'window_manager.dart';
 import 'app_dock.dart';
 import 'performance_monitor_panel.dart';
@@ -49,12 +51,37 @@ class _SpatialOsShellState extends State<SpatialOsShell> {
   /// 开发者工具面板可见性状态
   bool _isDevPanelVisible = false;
 
+  /// 便捷翻译方法
+  String _t(String key) {
+    try {
+      return I18nService.instance.translate(key, packageName: 'app_routing');
+    } catch (e) {
+      // 回退到英文硬编码
+      return key;
+    }
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // 设置WindowManager的屏幕尺寸
-    final screenSize = MediaQuery.of(context).size;
-    widget.windowManager.setScreenSize(screenSize);
+    // 设置WindowManager的屏幕尺寸 - Phase 2.2 Sprint 2 边界修复
+    final mediaQuery = MediaQuery.of(context);
+    final screenSize = mediaQuery.size;
+    final padding = mediaQuery.padding;
+    
+    // 考虑安全区域的有效屏幕尺寸
+    final effectiveSize = Size(
+      screenSize.width,
+      screenSize.height - padding.top - padding.bottom,
+    );
+    
+    widget.windowManager.setScreenSize(effectiveSize);
+    
+    // 调试信息
+    if (kDebugMode) {
+      print('🖥️ SpatialOsShell屏幕尺寸更新: ${effectiveSize.width}x${effectiveSize.height}');
+      print('📐 安全区域: top=${padding.top}, bottom=${padding.bottom}');
+    }
   }
 
   @override
@@ -130,7 +157,7 @@ class _SpatialOsShellState extends State<SpatialOsShell> {
             ),
             const SizedBox(height: 24),
             Text(
-              '桌宠AI助理平台',
+              _t('desktop_app_title'),
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
                 fontWeight: FontWeight.w300,
@@ -138,7 +165,7 @@ class _SpatialOsShellState extends State<SpatialOsShell> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Phase 2.0 Sprint 2.0b - 空间化OS模式',
+              _t('desktop_phase_info'),
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
               ),
@@ -180,7 +207,7 @@ class _SpatialOsShellState extends State<SpatialOsShell> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'WindowManager Status',
+                          _t('window_manager_status'),
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w600,
                             color: Theme.of(context).colorScheme.primary,
@@ -202,6 +229,23 @@ class _SpatialOsShellState extends State<SpatialOsShell> {
                               color: _isDevPanelVisible 
                                   ? Theme.of(context).colorScheme.primary 
                                   : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        
+                        // 设置按钮
+                        InkWell(
+                          onTap: () {
+                            _handleSettingsButtonTap();
+                          },
+                          borderRadius: BorderRadius.circular(4),
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            child: Icon(
+                              Icons.settings_outlined,
+                              size: 16,
+                              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
                             ),
                           ),
                         ),
@@ -230,10 +274,10 @@ class _SpatialOsShellState extends State<SpatialOsShell> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '活跃窗口: ${widget.windowManager.windowCount}/10\n'
-                      '焦点窗口: ${widget.windowManager.focusedWindow ?? "无"}\n'
-                      'Step 17: 数据监控面板 ${_isPerformanceMonitorVisible ? "✅" : "📱"}\n'
-                      'Step 19: DevPanel开发者工具 ${_isDevPanelVisible ? "✅" : "📱"}',
+                      '${_t('active_windows')}: ${widget.windowManager.windowCount}/10\n'
+                      '${_t('focused_window')}: ${widget.windowManager.focusedWindow ?? _t('no_focus')}\n'
+                      'Step 17: ${_t('data_monitor_status')} ${_isPerformanceMonitorVisible ? "✅" : "📱"}\n'
+                      'Step 19: ${_t('dev_panel_status')} ${_isDevPanelVisible ? "✅" : "📱"}',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
                       ),
@@ -291,7 +335,7 @@ class _SpatialOsShellState extends State<SpatialOsShell> {
               children: [
                 // 任务栏标签
                 Text(
-                  '最小化窗口:',
+                  '${_t('minimized_windows')}:',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
                     fontWeight: FontWeight.w500,
@@ -438,7 +482,16 @@ class _SpatialOsShellState extends State<SpatialOsShell> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(6),
-                  child: module.widgetBuilder(context),
+                  child: module.widgetBuilder != null 
+                      ? module.widgetBuilder!(context)
+                      : Center(
+                          child: Text(
+                            '${module.name} 模块暂未实现',
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                            ),
+                          ),
+                        ),
                 ),
               ),
             ),
@@ -459,7 +512,7 @@ class _SpatialOsShellState extends State<SpatialOsShell> {
         // 窗口创建成功
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('已启动 ${module.name} 模块窗口'),
+            content: Text(_t('window_opened').replaceAll('{moduleName}', module.name)),
             duration: const Duration(seconds: 2),
             backgroundColor: Theme.of(context).colorScheme.primary,
           ),
@@ -468,7 +521,113 @@ class _SpatialOsShellState extends State<SpatialOsShell> {
         // 窗口创建失败（可能已存在或达到限制）
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${module.name} 窗口已存在或已达到窗口数量限制'),
+            content: Text(_t('window_exists_error').replaceAll('{moduleName}', module.name)),
+            duration: const Duration(seconds: 2),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
+    });
+  }
+  
+  /// 处理设置按钮点击事件
+  void _handleSettingsButtonTap() {
+    // 创建设置窗口配置
+    final windowConfig = WindowConfig(
+      windowId: 'window_settings',
+      title: _t('settings_window_title'),
+      content: Container(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            // 设置头部信息
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.settings,
+                    size: 32,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _t('settings_window_title'),
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          _t('settings_window_subtitle'),
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            
+            const SizedBox(height: 16),
+            
+            // 设置页面内容 - 这里可以嵌入实际的设置页面
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+                  ),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: Center(
+                    child: Text(
+                      _t('settings_content_placeholder'),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      initialSize: const Size(600, 500),
+      resizable: true,
+      draggable: true,
+      closable: true,
+      minimizable: true,
+      maximizable: true,
+    );
+    
+    // 使用WindowManager创建设置窗口
+    widget.windowManager.createWindow(windowConfig).then((success) {
+      if (success) {
+        // 窗口创建成功
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(_t('settings_window_opened')),
+            duration: const Duration(seconds: 2),
+            backgroundColor: Theme.of(context).colorScheme.primary,
+          ),
+        );
+      } else {
+        // 窗口创建失败（可能已存在或达到限制）
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(_t('settings_window_exists')),
             duration: const Duration(seconds: 2),
             backgroundColor: Theme.of(context).colorScheme.error,
           ),

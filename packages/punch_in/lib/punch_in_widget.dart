@@ -15,6 +15,7 @@ Change History:
 import 'package:flutter/material.dart';
 import 'package:core_services/core_services.dart';
 import 'punch_in_module.dart';
+import 'l10n/punch_in_l10n.dart';
 
 /// 打卡模块本地化字符串类
 class PunchInLocalizations {
@@ -70,24 +71,10 @@ class _PunchInWidgetState extends State<PunchInWidget>
   late Animation<double> _xpAnimation;
   bool _isInitialized = false;
 
-  // 本地化getter（带默认中文回退）
-  PunchInLocalizations get localizations => widget.localizations ?? const PunchInLocalizations(
-    punchInTitle: '打卡',
-    initializing: '正在初始化桌宠打卡系统...',
-    currentXP: '当前经验值',
-    level: '等级',
-    todayPunchIn: '今日打卡',
-    punchNow: '立即打卡',
-    dailyLimitReached: '今日打卡已满',
-    punchInStats: '打卡统计',
-    totalPunches: '总打卡次数',
-    remainingToday: '今日剩余',
-    recentPunches: '最近打卡',
-    noPunchRecords: '暂无打卡记录',
-    punchSuccessWithXP: '打卡成功！获得 {xp} XP',
-    lastPunchTime: '最近打卡：{time}',
-    punchCount: '第{count}次打卡',
-  );
+  /// 便捷翻译方法 - Phase 2.2 Sprint 2 使用分布式i18n系统
+  String _t(String key) {
+    return PunchInL10n.t(key);
+  }
 
   @override
   void initState() {
@@ -141,7 +128,7 @@ class _PunchInWidgetState extends State<PunchInWidget>
             children: [
               const CircularProgressIndicator(),
               const SizedBox(height: 16),
-              Text(localizations.initializing),
+              Text(_t('initializing')),
             ],
           ),
         ),
@@ -151,7 +138,7 @@ class _PunchInWidgetState extends State<PunchInWidget>
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
       appBar: AppBar(
-        title: Text(localizations.punchInTitle),
+        title: Text(_t('punch_in_title')),
         backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
@@ -225,7 +212,7 @@ class _PunchInWidgetState extends State<PunchInWidget>
                 children: [
                   const Icon(Icons.stars, color: Colors.white, size: 32),
                   Text(
-                    localizations.currentXP,
+                    _t('current_xp'),
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -248,7 +235,7 @@ class _PunchInWidgetState extends State<PunchInWidget>
               ),
               const SizedBox(height: 8),
               Text(
-                '${localizations.level} ${(currentXP / 100).floor() + 1}',
+                '${_t('level')} ${(currentXP / 100).floor() + 1}',
                 style: const TextStyle(
                   color: Colors.white70,
                   fontSize: 16,
@@ -279,7 +266,7 @@ class _PunchInWidgetState extends State<PunchInWidget>
                 const Icon(Icons.touch_app, size: 28, color: Color(0xFF667eea)),
                 const SizedBox(width: 12),
                 Text(
-                  localizations.todayPunchIn,
+                  _t('today_punch_in'),
                   style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const Spacer(),
@@ -319,7 +306,7 @@ class _PunchInWidgetState extends State<PunchInWidget>
                 onPressed: canPunch ? _performPunchIn : null,
                 icon: Icon(canPunch ? Icons.star : Icons.block),
                 label: Text(
-                  canPunch ? '${localizations.punchNow} (+${_getNextXPGain()} XP)' : localizations.dailyLimitReached,
+                  canPunch ? '${_t('punch_now')} (+${_getNextXPGain()} XP)' : _t('daily_limit_reached'),
                   style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
                 style: ElevatedButton.styleFrom(
@@ -355,7 +342,7 @@ class _PunchInWidgetState extends State<PunchInWidget>
                 const Icon(Icons.analytics, color: Color(0xFF667eea)),
                 const SizedBox(width: 8),
                 Text(
-                  localizations.punchInStats,
+                  _t('punch_in_stats'),
                   style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ],
@@ -365,7 +352,7 @@ class _PunchInWidgetState extends State<PunchInWidget>
               children: [
                 Expanded(
                   child: _buildStatItem(
-                    localizations.totalPunches,
+                    _t('total_punches'),
                     '${stats['totalPunches']}',
                     Icons.history,
                     Colors.blue,
@@ -373,7 +360,7 @@ class _PunchInWidgetState extends State<PunchInWidget>
                 ),
                 Expanded(
                   child: _buildStatItem(
-                    localizations.remainingToday,
+                    _t('remaining_today'),
                     '${stats['remainingPunches']}',
                     Icons.access_time,
                     Colors.orange,
@@ -389,7 +376,7 @@ class _PunchInWidgetState extends State<PunchInWidget>
                   const Icon(Icons.schedule, size: 16, color: Colors.grey),
                   const SizedBox(width: 8),
                   Text(
-                    localizations.lastPunchTime.replaceFirst('{time}', _formatDateTime(DateTime.parse(stats['lastPunchTime']))),
+                    _t('last_punch_time').replaceFirst('{time}', _formatDateTime(DateTime.parse(stats['lastPunchTime']))),
                     style: const TextStyle(color: Colors.grey),
                   ),
                 ],
@@ -443,7 +430,7 @@ class _PunchInWidgetState extends State<PunchInWidget>
                 const Icon(Icons.history, color: Color(0xFF667eea)),
                 const SizedBox(width: 8),
                 Text(
-                  localizations.recentPunches,
+                  _t('recent_punches'),
                   style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ],
@@ -454,7 +441,7 @@ class _PunchInWidgetState extends State<PunchInWidget>
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   child: Text(
-                    localizations.noPunchRecords,
+                    _t('no_punch_records'),
                     style: const TextStyle(color: Colors.grey),
                   ),
                 ),
@@ -494,7 +481,7 @@ class _PunchInWidgetState extends State<PunchInWidget>
                   style: const TextStyle(fontWeight: FontWeight.w500),
                 ),
                 Text(
-                  localizations.punchCount.replaceFirst('{count}', '$dailyCount'),
+                  _t('punch_count').replaceFirst('{count}', '$dailyCount'),
                   style: const TextStyle(fontSize: 12, color: Colors.grey),
                 ),
               ],
@@ -529,7 +516,7 @@ class _PunchInWidgetState extends State<PunchInWidget>
     
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(localizations.punchSuccessWithXP.replaceFirst('{xp}', '$xpGained')),
+        content: Text(_t('punch_success_with_xp').replaceFirst('{xp}', '$xpGained')),
       ),
     );
     

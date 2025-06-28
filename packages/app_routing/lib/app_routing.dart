@@ -25,4 +25,7 @@ Change History:
 export 'app_router.dart';
 
 // 导出路由定义
-export 'route_definitions.dart'; 
+export 'route_definitions.dart';
+
+// 导出国际化
+export 'l10n/routing_l10n.dart'; 

@@ -16,6 +16,7 @@ Change History:
 import 'dart:async';
 import 'dart:developer' as developer;
 import 'package:core_services/core_services.dart' hide ItemType, ItemStatus;
+import 'package:ui_framework/ui_framework.dart';
 
 /// 创意类型枚举
 enum CreativeItemType {
@@ -132,7 +133,7 @@ class CreativeItemStatusChangedEvent extends WorkshopEvent {
 }
 
 /// 创意项目模型
-class CreativeItem {
+class CreativeItem implements EditableItem {
   final String id;
   final CreativeItemType type;
   final String title;
@@ -163,6 +164,8 @@ class CreativeItem {
     this.metadata = const {},
   });
 
+  /// 实现EditableItem接口所需的copyWith方法
+  @override
   CreativeItem copyWith({
     String? id,
     CreativeItemType? type,

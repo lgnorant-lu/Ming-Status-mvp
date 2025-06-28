@@ -16,6 +16,7 @@ Change History:
 import 'dart:async';
 import 'dart:developer' as developer;
 import 'package:core_services/core_services.dart';
+import 'package:ui_framework/ui_framework.dart';
 
 /// 事务类型枚举
 enum ItemType {
@@ -126,7 +127,7 @@ class DataSyncEvent extends NotesHubEvent {
 }
 
 /// 基础事务模型
-class NotesHubItem {
+class NotesHubItem implements EditableItem {
   final String id;
   final ItemType type;
   final String title;
@@ -153,7 +154,35 @@ class NotesHubItem {
     this.metadata = const {},
   });
 
+  // EditableItem interface implementation
+  @override
+  String get description => content;
+
+  /// EditableItem interface copyWith implementation
+  @override
   NotesHubItem copyWith({
+    String? title,
+    String? description,
+    String? content,
+    List<String>? tags,
+  }) {
+    return NotesHubItem(
+      id: id,
+      type: type,
+      title: title ?? this.title,
+      content: content ?? description ?? this.content,
+      status: status,
+      priority: priority,
+      createdAt: createdAt,
+      updatedAt: DateTime.now(),
+      dueDate: dueDate,
+      tags: tags ?? this.tags,
+      metadata: metadata,
+    );
+  }
+
+  /// Extended copyWith method for full NotesHubItem properties
+  NotesHubItem copyWithFull({
     String? id,
     ItemType? type,
     String? title,
@@ -366,7 +395,7 @@ class NotesHubModule implements PetModuleInterface {
 
     // 创建更新后的事务
     final oldStatus = item.status;
-    final updatedItem = item.copyWith(
+    final updatedItem = item.copyWithFull(
       title: title,
       content: content,
       status: status,

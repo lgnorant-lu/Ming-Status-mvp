@@ -5,4 +5,7 @@ library punch_in;
  
 // 模块组件
 export 'punch_in_module.dart';
-export 'punch_in_widget.dart'; 
+export 'punch_in_widget.dart';
+
+// Phase 2.2 Sprint 2: 分布式i18n支持
+export 'l10n/punch_in_l10n.dart'; 

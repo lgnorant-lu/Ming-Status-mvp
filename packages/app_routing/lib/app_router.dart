@@ -22,6 +22,7 @@ import 'package:notes_hub/notes_hub.dart';
 import 'package:workshop/workshop.dart';
 import 'package:punch_in/punch_in.dart';
 import 'route_definitions.dart';
+import 'l10n/routing_l10n.dart';
 
 /// 应用路由配置类
 /// 
@@ -37,7 +38,7 @@ class AppRouter {
     // 错误页面处理
     errorBuilder: (context, state) => Scaffold(
       appBar: AppBar(
-        title: const Text('页面未找到'),
+        title: Text(RoutingL10n.t('page_not_found')),
       ),
       body: Center(
         child: Column(
@@ -50,13 +51,13 @@ class AppRouter {
             ),
             const SizedBox(height: 16),
             Text(
-              '路径未找到: ${state.uri}',
+              RoutingL10n.t('path_not_found').replaceFirst('{path}', state.uri.toString()),
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () => context.go(RoutePaths.home),
-              child: const Text('返回首页'),
+              child: Text(RoutingL10n.t('return_home')),
             ),
           ],
         ),
@@ -125,8 +126,8 @@ class AppRouter {
         name: 'about',
         builder: (context, state) => _buildPlaceholderPage(
           context,
-          '关于',
-          '桌宠AI助理平台 v2.1.0\nPhase 2.1 三端自适应UI框架',
+          RoutingL10n.t('about_title'),
+          RoutingL10n.t('about_app_version'),
         ),
       ),
     ],
@@ -135,11 +136,18 @@ class AppRouter {
   /// 获取路由器实例
   static GoRouter get router => _router;
   
-  /// 处理语言切换 - 未来可与国际化系统集成
+  /// 处理语言切换 - 集成LocaleService实现真正的国际化
   static void _handleLocaleChange(Locale locale) {
-    // TODO: Phase 2.2 - 集成真正的国际化系统
-    // 目前暂时处理为空，未来可以更新所有本地化字符串
-    debugPrint('Locale changed to: ${locale.languageCode}');
+    // Phase 2.2 Sprint 2 - 集成LocaleService实现响应式语言切换
+    try {
+      // 导入core_services以使用localeService
+      final supportedLocale = SupportedLocale.fromLocale(locale);
+      // 注意：这里不直接调用switchToLocale，避免循环调用
+      // 语言切换主要由LocaleService管理，这里只做日志记录
+      debugPrint('🌐 AppRouter收到语言切换请求: ${locale.languageCode} -> ${supportedLocale.displayName}');
+    } catch (e) {
+      debugPrint('⚠️ AppRouter处理语言切换失败: $e');
+    }
   }
   
   /// 导航到指定路径
@@ -172,21 +180,21 @@ class AppRouter {
     }
   }
 
-  /// 构建模块列表 - 集成真实的业务模块
+  /// 构建模块列表 - 集成真实的业务模块，使用分布式i18n
   static List<ModuleInfo> _buildModuleList() {
     return [
       ModuleInfo(
         id: 'home',
-        name: '首页',
-        description: '应用概览和模块状态',
+        name: RoutingL10n.t('home_nav'),
+        description: RoutingL10n.t('home_description'),
         icon: Icons.home,
         widgetBuilder: (context) => _buildHomePage(context),
         order: 0,
       ),
       ModuleInfo(
         id: 'notes_hub',
-        name: '事务中心',
-        description: '管理您的笔记和任务',
+        name: RoutingL10n.t('notes_hub_nav'),
+        description: RoutingL10n.t('notes_hub_description'),
         icon: Icons.note,
         widgetBuilder: (context) => NotesHubWidget(
           localizations: _getNotesHubLocalizations(),
@@ -195,8 +203,8 @@ class AppRouter {
       ),
       ModuleInfo(
         id: 'workshop',
-        name: '创意工坊',
-        description: '记录您的创意和灵感',
+        name: RoutingL10n.t('workshop_nav'),
+        description: RoutingL10n.t('workshop_description'),
         icon: Icons.build,
         widgetBuilder: (context) => WorkshopWidget(
           localizations: _getWorkshopLocalizations(),
@@ -205,8 +213,8 @@ class AppRouter {
       ),
       ModuleInfo(
         id: 'punch_in',
-        name: '打卡',
-        description: '记录您的考勤时间',
+        name: RoutingL10n.t('punch_in_nav'),
+        description: RoutingL10n.t('punch_in_description'),
         icon: Icons.access_time,
         widgetBuilder: (context) => PunchInWidget(
           localizations: _getPunchInLocalizations(),
@@ -240,7 +248,7 @@ class AppRouter {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          '欢迎使用桌宠AI助理平台',
+                          RoutingL10n.t('welcome_message'),
                           style: Theme.of(context).textTheme.headlineSmall,
                         ),
                       ),
@@ -248,7 +256,7 @@ class AppRouter {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    '基于"桌宠-总线"插件式架构的智能助理平台',
+                    RoutingL10n.t('app_description'),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
@@ -275,7 +283,7 @@ class AppRouter {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        'Phase 2.1 三端自适应架构',
+                        RoutingL10n.t('project_info'),
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: Theme.of(context).colorScheme.secondary,
                         ),
@@ -284,7 +292,7 @@ class AppRouter {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '✅ ModularMobileShell (真正模块化移动端) 已实现\n✅ DisplayModeAwareShell (三端智能适配) 已集成\n✅ DisplayModeService (动态切换服务) 已启用',
+                    RoutingL10n.t('project_features'),
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 12),
@@ -331,7 +339,7 @@ class AppRouter {
                             ),
                             TextButton(
                               onPressed: () => navigateTo(context, RoutePaths.settings),
-                              child: const Text('切换'),
+                              child: Text(RoutingL10n.t('switch_button')),
                             ),
                           ],
                         ),
@@ -347,7 +355,7 @@ class AppRouter {
           
           // 模块状态
           Text(
-            '模块状态',
+            RoutingL10n.t('module_status'),
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
@@ -376,54 +384,55 @@ class AppRouter {
     )).toList();
   }
 
-  /// 获取默认本地化
+  /// 获取默认本地化 - 使用分布式i18n系统
   static MainShellLocalizations _getDefaultLocalizations() {
-    // 这里返回一个简化的本地化对象，实际应该从国际化系统获取
-    return const MainShellLocalizations(
-      appTitle: '桌宠AI助理平台',
-      home: '首页',
-      notesHub: '事务中心',
-      workshop: '创意工坊',
-      punchIn: '打卡',
-      settings: '设置',
-      welcomeMessage: '欢迎使用桌宠AI助理平台',
-      appDescription: '基于"桌宠-总线"插件式架构的智能助理平台',
-      moduleStatusTitle: '模块状态',
-      notesHubDescription: '管理您的笔记和任务',
-      workshopDescription: '记录您的创意和灵感',
-      punchInDescription: '记录您的考勤时间',
-      // 简化的字段，使用默认值
-      note: '笔记', todo: '待办', project: '项目', reminder: '提醒',
-      habit: '习惯', goal: '目标', allTypes: '全部类型', total: '总计',
-      active: '活跃', completed: '已完成', archived: '已归档',
-      searchHint: '搜索事务...', initializing: '正在初始化...',
-      priorityUrgent: '紧急', priorityHigh: '高', priorityMedium: '中', priorityLow: '低',
-      createNew: '新建{itemType}', noItemsFound: '暂无{itemType}',
-      createItemHint: '点击 + 按钮创建{itemType}', confirmDelete: '确认删除',
-      confirmDeleteMessage: '确定要删除"{itemName}"吗？此操作无法撤销。',
-      itemDeleted: '项目已删除', newItemCreated: '已创建新的{itemType}',
-      save: '保存', cancel: '取消', edit: '编辑', delete: '删除',
-      title: '标题', content: '内容', priority: '优先级', status: '状态',
-      createdAt: '创建时间', updatedAt: '更新时间', dueDate: '截止日期',
-      tags: '标签', close: '关闭', createFailed: '创建失败',
-      deleteSuccess: '删除成功', deleteFailed: '删除失败', itemNotFound: '项目不存在',
-      initializingWorkshop: '正在初始化创意工坊...', noCreativeProjects: '暂无创意项目',
-      createNewCreativeProject: '新建创意项目', newCreativeIdea: '新创意想法',
-      newCreativeDescription: '描述创意想法', detailedCreativeContent: '创意详细内容',
-      creativeProjectCreated: '创意项目已创建', editFunctionTodo: '编辑功能待实现',
-      creativeProjectDeleted: '创意项目已删除', initializingPunchIn: '正在初始化打卡...',
-      currentXP: '当前经验值', level: '等级', todayPunchIn: '今日打卡',
-      punchNow: '立即打卡', dailyLimitReached: '今日打卡次数已达上限',
-      punchInStats: '打卡统计', totalPunches: '总打卡次数',
-      remainingToday: '今日剩余打卡次数', recentPunches: '最近打卡记录',
-      noPunchRecords: '暂无打卡记录', punchSuccessWithXP: '打卡成功并获得经验值',
-      lastPunchTime: '上次打卡时间', punchCount: '打卡次数',
-      coreFeatures: '核心功能', builtinModules: '内置模块',
-      extensionModules: '扩展模块', system: '系统', petAssistant: '桌宠助手',
-      versionInfo: 'Phase 2.0 - v2.0.0', moduleStatus: '模块: {active}/{total} 活跃',
-      moduleManagement: '模块管理', copyrightInfo: '© 2025 桌宠AI助理平台\nPowered by Flutter',
-      about: '关于', moduleManagementDialog: '模块管理',
-      moduleManagementTodo: '模块管理功能将在Phase 2.1中实现',
+    // Phase 2.2 Sprint 2: 使用分布式i18n系统替代硬编码
+    return MainShellLocalizations(
+      appTitle: RoutingL10n.t('app_title'),
+      home: RoutingL10n.t('home_nav'),
+      notesHub: RoutingL10n.t('notes_hub_nav'),
+      workshop: RoutingL10n.t('workshop_nav'),
+      punchIn: RoutingL10n.t('punch_in_nav'),
+      settings: RoutingL10n.t('settings_title'),
+      welcomeMessage: RoutingL10n.t('welcome_message'),
+      appDescription: RoutingL10n.t('app_description'),
+      moduleStatusTitle: RoutingL10n.t('module_status'),
+      notesHubDescription: RoutingL10n.t('notes_hub_description'),
+      workshopDescription: RoutingL10n.t('workshop_description'),
+      punchInDescription: RoutingL10n.t('punch_in_description'),
+      // 业务模块字段 - 将逐步使用业务包级i18n替代
+      note: 'Note', todo: 'Task', project: 'Project', reminder: 'Reminder',
+      habit: 'Habit', goal: 'Goal', allTypes: 'All Types', total: 'Total',
+      active: 'Active', completed: 'Completed', archived: 'Archived',
+      searchHint: 'Search...', initializing: 'Initializing...',
+      priorityUrgent: 'Urgent', priorityHigh: 'High', priorityMedium: 'Medium', priorityLow: 'Low',
+      createNew: 'Create new {itemType}', noItemsFound: 'No {itemType} found',
+      createItemHint: 'Tap + button to create {itemType}', confirmDelete: 'Confirm Delete',
+      confirmDeleteMessage: 'Are you sure you want to delete "{itemName}"? This action cannot be undone.',
+      itemDeleted: 'Item deleted', newItemCreated: 'Created new {itemType}',
+      save: 'Save', cancel: 'Cancel', edit: 'Edit', delete: 'Delete',
+      title: 'Title', content: 'Content', priority: 'Priority', status: 'Status',
+      createdAt: 'Created At', updatedAt: 'Updated At', dueDate: 'Due Date',
+      tags: 'Tags', close: 'Close', createFailed: 'Create Failed',
+      deleteSuccess: 'Delete Success', deleteFailed: 'Delete Failed', itemNotFound: 'Item Not Found',
+      initializingWorkshop: 'Initializing Workshop...', noCreativeProjects: 'No Creative Projects',
+      createNewCreativeProject: 'Create New Creative Project', newCreativeIdea: 'New Creative Idea',
+      newCreativeDescription: 'Creative Description', detailedCreativeContent: 'Creative Content',
+      creativeProjectCreated: 'Creative Project Created',
+      creativeProjectDeleted: 'Creative Project Deleted', initializingPunchIn: 'Initializing Punch In...',
+      currentXP: 'Current XP', level: 'Level', todayPunchIn: 'Today Punch In',
+      punchNow: 'Punch Now', dailyLimitReached: 'Daily Limit Reached',
+      punchInStats: 'Punch In Stats', totalPunches: 'Total Punches',
+      remainingToday: 'Remaining Today', recentPunches: 'Recent Punches',
+      noPunchRecords: 'No Punch Records', punchSuccessWithXP: 'Punch Success with XP',
+      lastPunchTime: 'Last Punch Time', punchCount: 'Punch Count',
+      coreFeatures: RoutingL10n.t('core_features'), builtinModules: RoutingL10n.t('builtin_modules'),
+      extensionModules: RoutingL10n.t('extension_modules'), system: RoutingL10n.t('system'), 
+      petAssistant: RoutingL10n.t('pet_assistant'), versionInfo: RoutingL10n.t('version_info'), 
+      moduleStatus: RoutingL10n.t('module_active'), moduleManagement: RoutingL10n.t('module_management'), 
+      copyrightInfo: RoutingL10n.t('copyright_info'), about: RoutingL10n.t('about_nav'), 
+      moduleManagementDialog: RoutingL10n.t('module_management_dialog'),
+      moduleManagementTodo: RoutingL10n.t('module_management_todo'),
     );
   }
 
@@ -465,7 +474,6 @@ class AppRouter {
       newCreativeIdea: shell.newCreativeIdea, newCreativeDescription: shell.newCreativeDescription,
       detailedCreativeContent: shell.detailedCreativeContent,
       creativeProjectCreated: shell.creativeProjectCreated,
-      editFunctionTodo: shell.editFunctionTodo,
       creativeProjectDeleted: shell.creativeProjectDeleted,
       edit: shell.edit, delete: shell.delete,
     );
@@ -521,11 +529,11 @@ class AppRouter {
                 children: [
                   ElevatedButton(
                     onPressed: () => goBack(context),
-                    child: const Text('返回'),
+                    child: Text(RoutingL10n.t('back_button')),
                   ),
                   ElevatedButton(
                     onPressed: () => navigateTo(context, RoutePaths.home),
-                    child: const Text('首页'),
+                    child: Text(RoutingL10n.t('home_button')),
                   ),
                 ],
               ),
@@ -536,163 +544,8 @@ class AppRouter {
     );
   }
 
-  /// 构建设置页面 - Phase 2.1 集成DisplayMode切换功能
+  /// 构建设置页面 - Phase 2.2C Step 8 完整实现
   static Widget _buildSettingsPage(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('设置'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Phase 2.1 显示模式切换区域
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.display_settings,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          '显示模式',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    
-                    // DisplayModeService集成
-                    StreamBuilder<DisplayMode>(
-                      stream: displayModeService.currentModeStream,
-                      initialData: displayModeService.currentMode,
-                      builder: (context, snapshot) {
-                        final currentMode = snapshot.data ?? DisplayMode.mobile;
-                        
-                        return Column(
-                          children: [
-                            Text(
-                              '当前模式: ${currentMode.displayName}',
-                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              currentMode.description,
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            
-                            // 模式切换按钮
-                            Wrap(
-                              spacing: 8,
-                              children: DisplayMode.values.map((mode) {
-                                final isSelected = mode == currentMode;
-                                return FilterChip(
-                                  selected: isSelected,
-                                  label: Text(mode.displayName),
-                                  onSelected: (selected) {
-                                    if (selected && mode != currentMode) {
-                                      displayModeService.switchToMode(mode);
-                                    }
-                                  },
-                                  backgroundColor: isSelected 
-                                      ? Theme.of(context).colorScheme.primaryContainer
-                                      : null,
-                                  selectedColor: Theme.of(context).colorScheme.primaryContainer,
-                                  checkmarkColor: Theme.of(context).colorScheme.primary,
-                                );
-                              }).toList(),
-                            ),
-                            
-                            const SizedBox(height: 12),
-                            
-                            // 快速切换按钮
-                            SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton.icon(
-                                onPressed: () => displayModeService.switchToNextMode(),
-                                icon: const Icon(Icons.swap_horiz),
-                                label: const Text('切换到下一种模式'),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            
-            const SizedBox(height: 16),
-            
-            // 其他设置选项占位符
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.tune,
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          '应用设置',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      '主题设置、通知偏好、数据同步等功能\n将在后续版本中实现',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            
-            const SizedBox(height: 32),
-            
-            // 返回按钮
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () => goBack(context),
-                  child: const Text('返回'),
-                ),
-                ElevatedButton(
-                  onPressed: () => navigateTo(context, RoutePaths.home),
-                  child: const Text('首页'),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
+    return const SettingsPage();
   }
 } 

@@ -5,4 +5,7 @@ library workshop;
  
 // 模块组件
 export 'workshop_module.dart';
-export 'workshop_widget.dart'; 
+export 'workshop_widget.dart';
+
+// Phase 2.2 Sprint 2: 分布式i18n支持
+export 'l10n/workshop_l10n.dart'; 

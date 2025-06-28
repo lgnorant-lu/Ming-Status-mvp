@@ -30,8 +30,11 @@ class ModuleInfo {
   final String name;
   final String description;
   final IconData icon;
-  final Widget Function(BuildContext context) widgetBuilder;
+  final Widget Function(BuildContext context)? widgetBuilder;
   final bool isActive;
+  final bool isCoreModule;
+  final String version;
+  final String author;
   final int order;
 
   const ModuleInfo({
@@ -39,8 +42,11 @@ class ModuleInfo {
     required this.name,
     required this.description,
     required this.icon,
-    required this.widgetBuilder,
+    this.widgetBuilder,
     this.isActive = true,
+    this.isCoreModule = false,
+    this.version = '1.0.0',
+    this.author = 'System',
     this.order = 0,
   });
 }
@@ -226,7 +232,13 @@ class _StandardAppShellState extends State<StandardAppShell> {
   Widget _buildBody() {
     if (_selectedIndex >= 0 && _selectedIndex < widget.modules.length) {
       final module = widget.modules[_selectedIndex];
-      return module.widgetBuilder(context);
+      if (module.widgetBuilder != null) {
+        return module.widgetBuilder!(context);
+      } else {
+        return const Center(
+          child: Text('模块暂未实现'),
+        );
+      }
     }
     return const Center(
       child: Text('模块未找到'),
@@ -371,7 +383,6 @@ class _StandardAppShellState extends State<StandardAppShell> {
       newCreativeDescription: '描述创意想法',
       detailedCreativeContent: '创意详细内容',
       creativeProjectCreated: '创意项目已创建',
-      editFunctionTodo: '编辑功能待实现',
       creativeProjectDeleted: '创意项目已删除',
       initializingPunchIn: '正在初始化打卡...',
       currentXP: '当前经验值',

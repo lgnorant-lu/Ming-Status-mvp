@@ -13,6 +13,7 @@ Change History:
 */
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ui_framework/ui_framework.dart';
 
 /// ModularMobileShell - 真正的移动端模块化外壳
@@ -51,8 +52,7 @@ class _ModularMobileShellState extends State<ModularMobileShell> with TickerProv
   /// 系统状态栏可见性
   bool _isSystemBarVisible = true;
   
-  // 默认中文本地化（回退方案）
-  MainShellLocalizations get localizations => widget.localizations ?? _getDefaultLocalizations();
+  // Phase 1.6残余已清理 - 现在完全使用UIL10n.t()分布式i18n系统
 
   @override
   void initState() {
@@ -214,14 +214,14 @@ class _ModularMobileShellState extends State<ModularMobileShell> with TickerProv
               IconButton(
                 icon: const Icon(Icons.minimize),
                 onPressed: () => _minimizeModule(moduleInstance.moduleInfo.id),
-                tooltip: '最小化到后台',
+                tooltip: UIL10n.t('minimize_to_background'),
               ),
               
               // 关闭模块
               IconButton(
                 icon: const Icon(Icons.close),
                 onPressed: () => _closeModule(moduleInstance.moduleInfo.id),
-                tooltip: '关闭模块',
+                tooltip: UIL10n.t('close_module'),
               ),
             ],
           ),
@@ -288,6 +288,13 @@ class _ModularMobileShellState extends State<ModularMobileShell> with TickerProv
             
             const SizedBox(width: 8),
             
+            // 设置按钮
+            IconButton(
+              icon: const Icon(Icons.settings_outlined, size: 20),
+              onPressed: () => context.go('/settings'),
+              tooltip: UIL10n.t('settings'),
+            ),
+            
             // 任务管理器按钮
             IconButton(
               icon: Icon(
@@ -299,7 +306,7 @@ class _ModularMobileShellState extends State<ModularMobileShell> with TickerProv
                   _isTaskManagerVisible = !_isTaskManagerVisible;
                 });
               },
-              tooltip: '任务管理器',
+              tooltip: UIL10n.t('task_manager'),
             ),
           ],
         ),
@@ -331,7 +338,7 @@ class _ModularMobileShellState extends State<ModularMobileShell> with TickerProv
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '运行中的模块 (${_activeModules.length})',
+              UIL10n.t('running_modules_count').replaceAll('{count}', '${_activeModules.length}'),
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -343,7 +350,7 @@ class _ModularMobileShellState extends State<ModularMobileShell> with TickerProv
               child: _activeModules.isEmpty
                   ? Center(
                       child: Text(
-                        '没有运行中的模块',
+                        UIL10n.t('no_running_modules'),
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
                         ),
@@ -378,7 +385,7 @@ class _ModularMobileShellState extends State<ModularMobileShell> with TickerProv
                             ),
                             title: Text(module.moduleInfo.name),
                             subtitle: Text(
-                              isForeground ? '前台运行' : '后台运行',
+                              isForeground ? UIL10n.t('running_foreground') : UIL10n.t('running_background'),
                               style: TextStyle(
                                 color: isForeground 
                                     ? Theme.of(context).colorScheme.primary
@@ -502,7 +509,7 @@ class _ModularMobileShellState extends State<ModularMobileShell> with TickerProv
                   _isSystemBarVisible = !_isSystemBarVisible;
                 });
               },
-              tooltip: '切换系统栏',
+              tooltip: UIL10n.t('toggle_system_bar'),
             ),
           ],
         ),
@@ -523,7 +530,7 @@ class _ModularMobileShellState extends State<ModularMobileShell> with TickerProv
           ),
           const SizedBox(height: 24),
           Text(
-            '模块化移动平台',
+            UIL10n.t('modular_mobile_platform'),
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
               color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
               fontWeight: FontWeight.w300,
@@ -531,14 +538,14 @@ class _ModularMobileShellState extends State<ModularMobileShell> with TickerProv
           ),
           const SizedBox(height: 8),
           Text(
-            'Phase 2.1 - 每个模块都是独立应用',
+            UIL10n.t('phase_description'),
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
             ),
           ),
           const SizedBox(height: 32),
           Text(
-            '点击底部图标启动模块',
+            UIL10n.t('tap_icon_to_launch'),
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: Theme.of(context).colorScheme.primary,
             ),
@@ -568,9 +575,20 @@ class _ModularMobileShellState extends State<ModularMobileShell> with TickerProv
       orElse: () => throw Exception('Module not found: $moduleId'),
     );
     
+    // 检查模块是否有widgetBuilder
+    if (module.widgetBuilder == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${module.name} 模块暂未实现'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+      return;
+    }
+    
     final moduleInstance = _ModuleInstance(
       moduleInfo: module,
-      widget: module.widgetBuilder(context),
+      widget: module.widgetBuilder!(context),
       launchedAt: DateTime.now(),
     );
     
@@ -585,7 +603,7 @@ class _ModularMobileShellState extends State<ModularMobileShell> with TickerProv
     // 显示启动提示
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('已启动 ${module.name} 模块'),
+        content: Text(UIL10n.t('module_launched').replaceAll('{moduleName}', module.name)),
         duration: const Duration(seconds: 1),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
@@ -633,7 +651,7 @@ class _ModularMobileShellState extends State<ModularMobileShell> with TickerProv
     
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('已关闭 ${moduleInstance.moduleInfo.name} 模块'),
+        content: Text(UIL10n.t('module_closed').replaceAll('{moduleName}', moduleInstance.moduleInfo.name)),
         duration: const Duration(seconds: 1),
       ),
     );
@@ -645,100 +663,7 @@ class _ModularMobileShellState extends State<ModularMobileShell> with TickerProv
     return '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
   }
 
-  /// 获取默认本地化（与ResponsiveWebShell一致）
-  static MainShellLocalizations _getDefaultLocalizations() {
-    return const MainShellLocalizations(
-      appTitle: '桌宠AI助理平台',
-      home: '首页',
-      notesHub: '事务中心',
-      workshop: '创意工坊',
-      punchIn: '打卡',
-      settings: '设置',
-      welcomeMessage: '欢迎使用桌宠AI助理平台',
-      appDescription: '基于"桌宠-总线"插件式架构的智能助理平台',
-      moduleStatusTitle: '模块状态',
-      notesHubDescription: '管理您的笔记和任务',
-      workshopDescription: '记录您的创意和灵感',
-      punchInDescription: '记录您的考勤时间',
-      // 其他字段省略...
-      note: '笔记',
-      todo: '待办',
-      project: '项目',
-      reminder: '提醒',
-      habit: '习惯',
-      goal: '目标',
-      allTypes: '全部类型',
-      total: '总计',
-      active: '活跃',
-      completed: '已完成',
-      archived: '已归档',
-      searchHint: '搜索事务...',
-      initializing: '正在初始化...',
-      priorityUrgent: '紧急',
-      priorityHigh: '高',
-      priorityMedium: '中',
-      priorityLow: '低',
-      createNew: '新建{itemType}',
-      noItemsFound: '暂无{itemType}',
-      createItemHint: '点击 + 按钮创建{itemType}',
-      confirmDelete: '确认删除',
-      confirmDeleteMessage: '确定要删除"{itemName}"吗？此操作无法撤销。',
-      itemDeleted: '项目已删除',
-      newItemCreated: '已创建新的{itemType}',
-      save: '保存',
-      cancel: '取消',
-      edit: '编辑',
-      delete: '删除',
-      title: '标题',
-      content: '内容',
-      priority: '优先级',
-      status: '状态',
-      createdAt: '创建时间',
-      updatedAt: '更新时间',
-      dueDate: '截止日期',
-      tags: '标签',
-      close: '关闭',
-      createFailed: '创建失败',
-      deleteSuccess: '删除成功',
-      deleteFailed: '删除失败',
-      itemNotFound: '项目不存在',
-      initializingWorkshop: '正在初始化创意工坊...',
-      noCreativeProjects: '暂无创意项目',
-      createNewCreativeProject: '新建创意项目',
-      newCreativeIdea: '新创意想法',
-      newCreativeDescription: '描述创意想法',
-      detailedCreativeContent: '创意详细内容',
-      creativeProjectCreated: '创意项目已创建',
-      editFunctionTodo: '编辑功能待实现',
-      creativeProjectDeleted: '创意项目已删除',
-      initializingPunchIn: '正在初始化打卡...',
-      currentXP: '当前经验值',
-      level: '等级',
-      todayPunchIn: '今日打卡',
-      punchNow: '立即打卡',
-      dailyLimitReached: '今日打卡次数已达上限',
-      punchInStats: '打卡统计',
-      totalPunches: '总打卡次数',
-      remainingToday: '今日剩余打卡次数',
-      recentPunches: '最近打卡记录',
-      noPunchRecords: '暂无打卡记录',
-      punchSuccessWithXP: '打卡成功并获得经验值',
-      lastPunchTime: '上次打卡时间',
-      punchCount: '打卡次数',
-      coreFeatures: '核心功能',
-      builtinModules: '内置模块',
-      extensionModules: '扩展模块',
-      system: '系统',
-      petAssistant: '桌宠助手',
-      versionInfo: 'Phase 2.1 - 模块化移动端',
-      moduleStatus: '模块: {active}/{total} 活跃',
-      moduleManagement: '模块管理',
-      copyrightInfo: '© 2025 桌宠AI助理平台\nPowered by Flutter Mobile',
-      about: '关于',
-      moduleManagementDialog: '模块管理',
-      moduleManagementTodo: '模块管理功能将在Phase 2.1中实现',
-    );
-  }
+  // Phase 1.6残余已清理 - 现在完全使用UIL10n.t()分布式i18n系统
 }
 
 /// 模块实例类
